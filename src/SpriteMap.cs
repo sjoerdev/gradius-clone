@@ -1,4 +1,4 @@
-﻿namespace GameEngine
+﻿namespace Project
 {
     public class SpriteMap : GameObject
     {

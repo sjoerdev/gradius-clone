@@ -1,5 +1,6 @@
 ﻿using System;
-namespace GameEngine
+
+namespace Project
 {
     public class CoolText : UISprite
     {

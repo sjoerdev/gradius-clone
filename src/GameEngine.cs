@@ -26,7 +26,7 @@ using Color = SharpDX.Color;
 using NAudio.Wave.SampleProviders;
 
 
-namespace GameEngine
+namespace Project
 {
     //A stripped version of the System.Windows.Forms.Keys enum to avoid extra includes for students.
     #region RawDataTypes

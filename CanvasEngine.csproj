@@ -1,89 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Exe</OutputType>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <DefineConstants>
-    </DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-  </PropertyGroup>
+
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <Content Include="Assets\**" CopyToPublishDirectory="PreserveNewest"/>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Gradius Sound Effects\Explosion.wav" />
-    <Content Include="Assets\Gradius Sound Effects\Hit.wav" />
-    <Content Include="Assets\Gradius Sound Effects\Music.mp3" />
-    <Content Include="Assets\Gradius Sound Effects\Pickup.wav" />
-    <Content Include="Assets\Gradius Sound Effects\projectile.wav" />
-    <Content Include="Assets\Gradius Sound Effects\schoot.wav" />
-    <Content Include="Assets\Gradius Sound Effects\Select.wav" />
-    <Content Include="Assets\GradiusSprites\background.png" />
-    <Content Include="Assets\GradiusSprites\blue_lazer.png" />
-    <Content Include="Assets\GradiusSprites\default_bullet.png" />
-    <Content Include="Assets\GradiusSprites\disc_enemy.png" />
-    <Content Include="Assets\GradiusSprites\explosion.png" />
-    <Content Include="Assets\GradiusSprites\gradius_everything.png" />
-    <Content Include="Assets\GradiusSprites\gradius_player.png" />
-    <Content Include="Assets\GradiusSprites\health_bar_spritesheet.png" />
-    <Content Include="Assets\GradiusSprites\hud_cooltext.png" />
-    <Content Include="Assets\GradiusSprites\hud_devlogo.png" />
-    <Content Include="Assets\GradiusSprites\hud_lit.png" />
-    <Content Include="Assets\GradiusSprites\hud_title.png" />
-    <Content Include="Assets\GradiusSprites\hud_unlit.png" />
-    <Content Include="Assets\GradiusSprites\missile.png" />
-    <Content Include="Assets\GradiusSprites\Powerup.png" />
-    <Content Include="Assets\GradiusSprites\resistor_backplate.png" />
-    <Content Include="Assets\GradiusSprites\resistor_colors.png" />
-    <Content Include="Assets\GradiusSprites\rotating_gunner.png" />
-    <Content Include="Assets\GradiusSprites\rotating_plane.png" />
-    <Content Include="Assets\GradiusSprites\vic_viper.png" />
-    <Content Include="Assets\gradius_icon.ico" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="NAudio.Lame" Version="1.1.5" />
     <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />
     <PackageReference Include="SharpDX.Desktop" Version="4.2.0" />
-    <PackageReference Include="SharpDX.Diagnostics" Version="2.0.4" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
     <PackageReference Include="SharpDX.Mathematics" Version="4.2.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.336902">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
   </ItemGroup>
+
 </Project>

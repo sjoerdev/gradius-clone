@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace GameEngine
+namespace Project
 {
     public class Menu : GameObject
     {
