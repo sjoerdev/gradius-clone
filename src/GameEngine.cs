@@ -465,7 +465,7 @@ namespace Project
 
         //Window properties
         private string m_Title = "Why did you remove the SetTitle line in AbstractGame?";
-        private string m_IconPath = "../../Assets/icon.ico";
+        private string m_IconPath = "res/";
         private int m_Width = 800;
         private int m_Height = 600;
         private SharpDX.Color m_ClearColor = new SharpDX.Color(255, 255, 255);
@@ -764,9 +764,9 @@ namespace Project
         public void SetIcon(string iconPath)
         {
             #if DEBUG
-                m_IconPath = ("Assets/" + iconPath);
+                m_IconPath = ("res/" + iconPath);
             #else
-                m_IconPath = "Assets/" + iconPath;
+                m_IconPath = "res/" + iconPath;
             #endif
         }
 
@@ -2134,9 +2134,9 @@ namespace Project
         public Bitmap(string filePath)
         {
             #if DEBUG
-                LoadBitmap("Assets/" + filePath);
+                LoadBitmap("res/" + filePath);
             #else
-                LoadBitmap("Assets/" + filePath);
+                LoadBitmap("res/" + filePath);
             #endif
         }
 
@@ -2997,9 +2997,9 @@ namespace Project
         public Audio(string filePath)
         {
             #if DEBUG
-                LoadAudio("Assets/" + filePath);
+                LoadAudio("res/" + filePath);
             #else
-                LoadAudio("Assets/" + filePath);
+                LoadAudio("res/" + filePath);
             #endif
         }
 
