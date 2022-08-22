@@ -764,9 +764,9 @@ namespace GameEngine
         public void SetIcon(string iconPath)
         {
             #if DEBUG
-                m_IconPath = ("../../Assets/" + iconPath);
+                m_IconPath = ("Assets/" + iconPath);
             #else
-                m_IconPath = "./Assets/" + iconPath;
+                m_IconPath = "Assets/" + iconPath;
             #endif
         }
 
@@ -2134,9 +2134,9 @@ namespace GameEngine
         public Bitmap(string filePath)
         {
             #if DEBUG
-                LoadBitmap("../../Assets/" + filePath);
+                LoadBitmap("Assets/" + filePath);
             #else
-                LoadBitmap("./Assets/" + filePath);
+                LoadBitmap("Assets/" + filePath);
             #endif
         }
 
@@ -2997,9 +2997,9 @@ namespace GameEngine
         public Audio(string filePath)
         {
             #if DEBUG
-                LoadAudio("../../Assets/" + filePath);
+                LoadAudio("Assets/" + filePath);
             #else
-                LoadAudio("./Assets/" + filePath);
+                LoadAudio("Assets/" + filePath);
             #endif
         }
 

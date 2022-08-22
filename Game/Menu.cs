@@ -224,16 +224,12 @@ namespace GameEngine
                     }
                     if (m_SelectedOption == 2)
                     {
-                        System.Diagnostics.Process.Start("https://sjoerdwouters.com/");
-                    }
-                    if (m_SelectedOption == 3)
-                    {
                         System.Environment.Exit(1);
                     }
                 }
 
                 // select option
-                int LastOption = 3;
+                int LastOption = 2;
                 if (GAME_ENGINE.GetKeyDown(Key.Down) || GAME_ENGINE.GetKeyDown(Key.S))
                 {
                     // play sound
@@ -293,10 +289,6 @@ namespace GameEngine
                         text = "Reset High Score";
                     }
                     if (i == 2)
-                    {
-                        text = "My Website";
-                    }
-                    if (i == 3)
                     {
                         text = "Exit And Save";
                     }
