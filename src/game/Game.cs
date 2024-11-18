@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 
+using Project;
+
 namespace Project
 {
     // declare enums
@@ -56,7 +58,7 @@ namespace Project
         private Bitmap m_Background;
         private Bitmap m_HudLit;
         private Bitmap m_HudUnLit;
-        private List<Audio> m_AudioInGame = new List<Audio>();
+        private List<AudioClip> m_AudioInGame = new List<AudioClip>();
         private List<CoolText> m_CoolTextInGame = new List<CoolText>();
         private CoolText m_HealthCoolText;
         
@@ -82,8 +84,8 @@ namespace Project
         void SchootBullet(Vector2f startPosition, Vector2f direction, projectyleType type)
         {
             // play bullet sound
-            Audio audio = new Audio("Gradius Sound Effects/schoot.wav");
-            GAME_ENGINE.PlayAudio(audio);
+            AudioClip audio = new AudioClip("Gradius Sound Effects/schoot.wav");
+            Engine.audio.PlayAudio(audio);
             m_AudioInGame.Add(audio);
 
             // init bullet and its componements
@@ -96,7 +98,7 @@ namespace Project
         // checks if position is on screen or not
         bool IsPositionOnScreen(Vector2f position)
         {
-            if (position.X > 0 && position.X < GAME_ENGINE.GetScreenWidth() && position.Y > 0 && position.Y < GAME_ENGINE.GetScreenHeight())
+            if (position.X > 0 && position.X < Engine.windowWidth && position.Y > 0 && position.Y < Engine.windowHeight)
                 return true;
             else
                 return false;
@@ -105,16 +107,16 @@ namespace Project
         // animates the player
         void AnimatePlayer()
         {
-            if (GAME_ENGINE.GetKeyDown(Key.S) || GAME_ENGINE.GetKeyDown(Key.Down))
+            if (Engine.input.GetKeyDown(Key.S) || Engine.input.GetKeyDown(Key.Down))
             {
                 m_PlayerAnimateStartFrame = m_FrameCount;
             }
-            else if (GAME_ENGINE.GetKeyDown(Key.W) || GAME_ENGINE.GetKeyDown(Key.Up))
+            else if (Engine.input.GetKeyDown(Key.W) || Engine.input.GetKeyDown(Key.Up))
             {
                 m_PlayerAnimateStartFrame = m_FrameCount;
             }
 
-            if (GAME_ENGINE.GetKey(Key.S) || GAME_ENGINE.GetKey(Key.Down))
+            if (Engine.input.GetKey(Key.S) || Engine.input.GetKey(Key.Down))
             {
                 if (m_FrameCount == m_PlayerAnimateStartFrame)
                     m_Player.spritemap.SetSprite(new Vector2(3, 0));
@@ -122,7 +124,7 @@ namespace Project
                     m_Player.spritemap.SetSprite(new Vector2(4, 0));
 
             }
-            else if (GAME_ENGINE.GetKey(Key.W) || GAME_ENGINE.GetKey(Key.Up))
+            else if (Engine.input.GetKey(Key.W) || Engine.input.GetKey(Key.Up))
             {
                 if (m_FrameCount == m_PlayerAnimateStartFrame)
                     m_Player.spritemap.SetSprite(new Vector2(1, 0));
@@ -166,8 +168,8 @@ namespace Project
                                 // destroy life
                                 m_LifeInGame.Remove(life);
 
-                                Audio audio = new Audio("Gradius Sound Effects/Explosion.wav");
-                                GAME_ENGINE.PlayAudio(audio);
+                                AudioClip audio = new AudioClip("Gradius Sound Effects/Explosion.wav");
+                                Engine.audio.PlayAudio(audio);
                                 m_AudioInGame.Add(audio);
 
                                 // save score to file
@@ -183,8 +185,8 @@ namespace Project
 
                             // destroy projectile
                             m_ProjectilesInGame.Remove(projectile);
-                            Audio audio2 = new Audio("Gradius Sound Effects/Hit.wav");
-                            GAME_ENGINE.PlayAudio(audio2);
+                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Hit.wav");
+                            Engine.audio.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
 
                             return;
@@ -202,16 +204,16 @@ namespace Project
                             {
                                 // destroy life
                                 m_LifeInGame.Remove(life);
-                                Audio audio = new Audio("Gradius Sound Effects/Explosion.wav");
-                                GAME_ENGINE.PlayAudio(audio);
+                                AudioClip audio = new AudioClip("Gradius Sound Effects/Explosion.wav");
+                                Engine.audio.PlayAudio(audio);
                                 m_AudioInGame.Add(audio);
                                 m_Score += (int)(100 * m_ScoreMultiplier);
                             }
 
                             // destroy projectile
                             m_ProjectilesInGame.Remove(projectile);
-                            Audio audio2 = new Audio("Gradius Sound Effects/Hit.wav");
-                            GAME_ENGINE.PlayAudio(audio2);
+                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Hit.wav");
+                            Engine.audio.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
 
                             return;
@@ -226,7 +228,7 @@ namespace Project
         {
             EnemyToSpawn test = new EnemyToSpawn();
             test.timer = time;
-            test.position = new Vector2f(GAME_ENGINE.GetScreenWidth(), verticalStartPosition);
+            test.position = new Vector2f(Engine.windowWidth, verticalStartPosition);
             test.type = type;
             test.offsetFromPlayer = offsetFromPlayer;
             m_EnemySpawner.Add(test);
@@ -237,7 +239,7 @@ namespace Project
         {
             PickUpToSpawn test = new PickUpToSpawn();
             test.timer = time;
-            test.position = new Vector2f(GAME_ENGINE.GetScreenWidth(), verticalStartPosition);
+            test.position = new Vector2f(Engine.windowHeight, verticalStartPosition);
             test.type = type;
             m_PickUpSpawner.Add(test);
         }
@@ -249,10 +251,10 @@ namespace Project
             Vector2f acceleration = new Vector2f(4 * m_Player.speedMultiplier, 4 * m_Player.speedMultiplier);
             Vector2f drag = new Vector2f(0.991f, 0.991f);
 
-            bool w = GAME_ENGINE.GetKey(Key.W) || GAME_ENGINE.GetKey(Key.Up);
-            bool a = GAME_ENGINE.GetKey(Key.A) || GAME_ENGINE.GetKey(Key.Left);
-            bool s = GAME_ENGINE.GetKey(Key.S) || GAME_ENGINE.GetKey(Key.Down);
-            bool d = GAME_ENGINE.GetKey(Key.D) || GAME_ENGINE.GetKey(Key.Right);
+            bool w = Engine.input.GetKey(Key.W) || Engine.input.GetKey(Key.Up);
+            bool a = Engine.input.GetKey(Key.A) || Engine.input.GetKey(Key.Left);
+            bool s = Engine.input.GetKey(Key.S) || Engine.input.GetKey(Key.Down);
+            bool d = Engine.input.GetKey(Key.D) || Engine.input.GetKey(Key.Right);
 
             m_PlayerVector.X *= drag.X;
             m_PlayerVector.Y *= drag.Y;
@@ -283,9 +285,9 @@ namespace Project
                 m_Player.position.X = 0;
                 m_PlayerVector.X = 0;
             }
-            if (m_Player.position.X > GAME_ENGINE.GetScreenWidth() - 32 * 2)
+            if (m_Player.position.X > Engine.windowWidth - 32 * 2)
             {
-                m_Player.position.X = GAME_ENGINE.GetScreenWidth() - 32 * 2;
+                m_Player.position.X = Engine.windowWidth - 32 * 2;
                 m_PlayerVector.X = 0;
             }
             if (m_Player.position.Y < 0)
@@ -293,13 +295,13 @@ namespace Project
                 m_Player.position.Y = 0;
                 m_PlayerVector.Y = 0;
             }
-            if (m_Player.position.Y > GAME_ENGINE.GetScreenHeight() - 16 * 2)
+            if (m_Player.position.Y > Engine.windowHeight - 16 * 2)
             {
-                m_Player.position.Y = GAME_ENGINE.GetScreenHeight() - 16 * 2;
+                m_Player.position.Y = Engine.windowHeight - 16 * 2;
                 m_PlayerVector.Y = 0;
             }
 
-            m_Player.position += new Vector2f(m_PlayerVector.X * GAME_ENGINE.GetDeltaTime(), m_PlayerVector.Y * GAME_ENGINE.GetDeltaTime());
+            m_Player.position += new Vector2f(m_PlayerVector.X * Engine.deltaTime, m_PlayerVector.Y * Engine.deltaTime);
         }
 
         // checks if the player has picked up a pickup
@@ -319,12 +321,12 @@ namespace Project
                         {
                             // destroy notlife
                             m_PickUpInGame.Remove(pickUp);
-                            pickUp.Dispose();
+                            pickUp.Destroy();
                             m_PowerUpActive[0] = true;
                             m_PowerUpMomentOfActivation[0] = m_TimePast;
 
-                            Audio audio2 = new Audio("Gradius Sound Effects/Pickup.wav");
-                            GAME_ENGINE.PlayAudio(audio2);
+                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            Engine.audio.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
                         // if powerup
@@ -332,11 +334,11 @@ namespace Project
                         {
                             // destroy notlife
                             m_PickUpInGame.Remove(pickUp);
-                            pickUp.Dispose();
+                            pickUp.Destroy();
                             m_PowerUpActive[1] = true;
                             m_PowerUpMomentOfActivation[1] = m_TimePast;
-                            Audio audio2 = new Audio("Gradius Sound Effects/Pickup.wav");
-                            GAME_ENGINE.PlayAudio(audio2);
+                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            Engine.audio.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
                         // if powerup
@@ -344,11 +346,11 @@ namespace Project
                         {
                             // destroy notlife
                             m_PickUpInGame.Remove(pickUp);
-                            pickUp.Dispose();
+                            pickUp.Destroy();
                             m_PowerUpActive[2] = true;
                             m_PowerUpMomentOfActivation[2] = m_TimePast;
-                            Audio audio2 = new Audio("Gradius Sound Effects/Pickup.wav");
-                            GAME_ENGINE.PlayAudio(audio2);
+                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            Engine.audio.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
                         // if powerup
@@ -356,11 +358,11 @@ namespace Project
                         {
                             // destroy notlife
                             m_PickUpInGame.Remove(pickUp);
-                            pickUp.Dispose();
+                            pickUp.Destroy();
                             m_PowerUpActive[3] = true;
                             m_PowerUpMomentOfActivation[3] = m_TimePast;
-                            Audio audio2 = new Audio("Gradius Sound Effects/Pickup.wav");
-                            GAME_ENGINE.PlayAudio(audio2);
+                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            Engine.audio.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
 
@@ -418,15 +420,15 @@ namespace Project
         {
             m_BackGroundPos++;
 
-            if (m_BackGroundPos >= m_Background.GetWidth())
+            if (m_BackGroundPos >= m_Background.Width)
                 m_BackGroundPos = 0;
-            GAME_ENGINE.DrawBitmap(m_Background, new Vector2f(-m_BackGroundPos, 0));
+            Engine.DrawBitmap(m_Background, new Vector2f(-m_BackGroundPos, 0));
         }
 
         // updates the ui sprites to display the correct infomation
         void UpdateUISprites()
         {
-            GAME_ENGINE.SetColor(255, 255, 255);
+            Engine.SetColor(255, 255, 255);
             for (int i = 0; i < m_PowerupSpritesInGame.Count; i++)
             {
                 if (m_PowerUpActive[i])
@@ -445,107 +447,107 @@ namespace Project
                     int firstdigit = Convert.ToInt32(m_Score.ToString().Substring(0, 1));
 
                     if (firstdigit == 0)
-                        GAME_ENGINE.SetColor(0, 0, 0);
+                        Engine.SetColor(0, 0, 0);
                     else if (firstdigit == 1)
-                        GAME_ENGINE.SetColor(111, 47, 0);
+                        Engine.SetColor(111, 47, 0);
                     else if (firstdigit == 2)
-                        GAME_ENGINE.SetColor(255, 0, 0);
+                        Engine.SetColor(255, 0, 0);
                     else if (firstdigit == 3)
-                        GAME_ENGINE.SetColor(255, 120, 0);
+                        Engine.SetColor(255, 120, 0);
                     else if (firstdigit == 4)
-                        GAME_ENGINE.SetColor(255, 255, 0);
+                        Engine.SetColor(255, 255, 0);
                     else if (firstdigit == 5)
-                        GAME_ENGINE.SetColor(0, 255, 0);
+                        Engine.SetColor(0, 255, 0);
                     else if (firstdigit == 6)
-                        GAME_ENGINE.SetColor(0, 0, 255);
+                        Engine.SetColor(0, 0, 255);
                     else if (firstdigit == 7)
-                        GAME_ENGINE.SetColor(120, 0, 255);
+                        Engine.SetColor(120, 0, 255);
                     else if (firstdigit == 8)
-                        GAME_ENGINE.SetColor(120, 120, 120);
+                        Engine.SetColor(120, 120, 120);
                     else if (firstdigit == 9)
-                        GAME_ENGINE.SetColor(255, 255, 255);
+                        Engine.SetColor(255, 255, 255);
                 }
                 if (i == 1 && m_Score.ToString().Length > 1)
                 {
                     int seconddigit = Convert.ToInt32(m_Score.ToString().Substring(1, 1));
 
                     if (seconddigit == 0)
-                        GAME_ENGINE.SetColor(0, 0, 0);
+                        Engine.SetColor(0, 0, 0);
                     else if (seconddigit == 1)
-                        GAME_ENGINE.SetColor(111, 47, 0);
+                        Engine.SetColor(111, 47, 0);
                     else if (seconddigit == 2)
-                        GAME_ENGINE.SetColor(255, 0, 0);
+                        Engine.SetColor(255, 0, 0);
                     else if (seconddigit == 3)
-                        GAME_ENGINE.SetColor(255, 120, 0);
+                        Engine.SetColor(255, 120, 0);
                     else if (seconddigit == 4)
-                        GAME_ENGINE.SetColor(255, 255, 0);
+                        Engine.SetColor(255, 255, 0);
                     else if (seconddigit == 5)
-                        GAME_ENGINE.SetColor(0, 255, 0);
+                        Engine.SetColor(0, 255, 0);
                     else if (seconddigit == 6)
-                        GAME_ENGINE.SetColor(0, 0, 255);
+                        Engine.SetColor(0, 0, 255);
                     else if (seconddigit == 7)
-                        GAME_ENGINE.SetColor(120, 0, 255);
+                        Engine.SetColor(120, 0, 255);
                     else if (seconddigit == 8)
-                        GAME_ENGINE.SetColor(120, 120, 120);
+                        Engine.SetColor(120, 120, 120);
                     else if (seconddigit == 9)
-                        GAME_ENGINE.SetColor(255, 255, 255);
+                        Engine.SetColor(255, 255, 255);
                 }
                 if (i == 2 && m_Score.ToString().Length > 2)
                 {
                     int thirddigit = Convert.ToInt32(m_Score.ToString().Substring(2, 1));
 
                     if (thirddigit == 0)
-                        GAME_ENGINE.SetColor(0, 0, 0);
+                        Engine.SetColor(0, 0, 0);
                     else if (thirddigit == 1)
-                        GAME_ENGINE.SetColor(111, 47, 0);
+                        Engine.SetColor(111, 47, 0);
                     else if (thirddigit == 2)
-                        GAME_ENGINE.SetColor(255, 0, 0);
+                        Engine.SetColor(255, 0, 0);
                     else if (thirddigit == 3)
-                        GAME_ENGINE.SetColor(255, 120, 0);
+                        Engine.SetColor(255, 120, 0);
                     else if (thirddigit == 4)
-                        GAME_ENGINE.SetColor(255, 255, 0);
+                        Engine.SetColor(255, 255, 0);
                     else if (thirddigit == 5)
-                        GAME_ENGINE.SetColor(0, 255, 0);
+                        Engine.SetColor(0, 255, 0);
                     else if (thirddigit == 6)
-                        GAME_ENGINE.SetColor(0, 0, 255);
+                        Engine.SetColor(0, 0, 255);
                     else if (thirddigit == 7)
-                        GAME_ENGINE.SetColor(120, 0, 255);
+                        Engine.SetColor(120, 0, 255);
                     else if (thirddigit == 8)
-                        GAME_ENGINE.SetColor(120, 120, 120);
+                        Engine.SetColor(120, 120, 120);
                     else if (thirddigit == 9)
-                        GAME_ENGINE.SetColor(255, 255, 255);
+                        Engine.SetColor(255, 255, 255);
                 }
                 if (i == 3 && m_Score.ToString().Length > 0)
                 {
                     int multiplier = m_Score.ToString().Length - 3;
 
                     if (multiplier == 0)
-                        GAME_ENGINE.SetColor(0, 0, 0);
+                        Engine.SetColor(0, 0, 0);
                     else if (multiplier == 1)
-                        GAME_ENGINE.SetColor(111, 47, 0);
+                        Engine.SetColor(111, 47, 0);
                     else if (multiplier == 2)
-                        GAME_ENGINE.SetColor(255, 0, 0);
+                        Engine.SetColor(255, 0, 0);
                     else if (multiplier == 3)
-                        GAME_ENGINE.SetColor(255, 120, 0);
+                        Engine.SetColor(255, 120, 0);
                     else if (multiplier == 4)
-                        GAME_ENGINE.SetColor(255, 255, 0);
+                        Engine.SetColor(255, 255, 0);
                     else if (multiplier == 5)
-                        GAME_ENGINE.SetColor(0, 255, 0);
+                        Engine.SetColor(0, 255, 0);
                     else if (multiplier == 6)
-                        GAME_ENGINE.SetColor(0, 0, 255);
+                        Engine.SetColor(0, 0, 255);
                     else if (multiplier == 7)
-                        GAME_ENGINE.SetColor(120, 0, 255);
+                        Engine.SetColor(120, 0, 255);
                     else if (multiplier == 8)
-                        GAME_ENGINE.SetColor(120, 120, 120);
+                        Engine.SetColor(120, 120, 120);
                     else if (multiplier == 9)
-                        GAME_ENGINE.SetColor(255, 255, 255);
+                        Engine.SetColor(255, 255, 255);
                 }
                 if (m_Score <= 0)
                 {
-                    GAME_ENGINE.SetColor(0, 0, 0);
+                    Engine.SetColor(0, 0, 0);
                 }
 
-                GAME_ENGINE.FillRectangle(502 + i * 16 + i * 2, 582, 8, 3);
+                Engine.FillRectangle(502 + i * 16 + i * 2, 582, 8, 3);
             }
             m_HealthCoolText.text = m_Player.health.ToString();
             // draw all cooltext
@@ -751,7 +753,7 @@ namespace Project
                     AnimatePlayer();
 
                     
-                    if (GAME_ENGINE.GetKey(Key.Space))
+                    if (Engine.input.GetKey(Key.Space))
                     {
                         if (m_FrameCount % 30 == 0)
                         {
@@ -765,9 +767,9 @@ namespace Project
                 {
                     currentLife.position.Y = 0;
                 }
-                if (currentLife.position.Y > GAME_ENGINE.GetScreenHeight() - 16 * 2)
+                if (currentLife.position.Y > Engine.windowHeight - 16 * 2)
                 {
-                    currentLife.position.Y = GAME_ENGINE.GetScreenHeight() - 16 * 2;
+                    currentLife.position.Y = Engine.windowHeight - 16 * 2;
                 }
 
                 // dispose enemies no longer on screen
@@ -794,9 +796,9 @@ namespace Project
                 {
                     currentPickUp.position.Y = 0;
                 }
-                if (currentPickUp.position.Y > GAME_ENGINE.GetScreenHeight() - 16 * 2)
+                if (currentPickUp.position.Y > Engine.windowHeight - 16 * 2)
                 {
-                    currentPickUp.position.Y = GAME_ENGINE.GetScreenHeight() - 16 * 2;
+                    currentPickUp.position.Y = Engine.windowHeight - 16 * 2;
                 }
 
                 // dispose objects no longer on screen
@@ -855,7 +857,7 @@ namespace Project
             if (m_FrameCount % 420 == 0)
             {
                 Random random = new Random();
-                int ypos = random.Next(100, GAME_ENGINE.GetScreenHeight() - 100);
+                int ypos = random.Next(100, Engine.windowHeight - 100);
                 int spawntype = random.Next(1, 5);
 
                 if (spawntype == 1)
@@ -885,7 +887,7 @@ namespace Project
         void KeepTime()
         {
             m_FrameCount++;
-            m_TimePast += GAME_ENGINE.GetDeltaTime();
+            m_TimePast += Engine.deltaTime;
         }
 
         // this writes the score to disc
@@ -918,7 +920,7 @@ namespace Project
         // goes back to menu when pressing escape
         public void GoBackToMenuWhenEscape()
         {
-            if (GAME_ENGINE.GetKeyDown(Key.Escape))
+            if (Engine.input.GetKeyDown(Key.Escape))
             {
                 // save score to file
                 if (m_Score > GetScore())
@@ -941,9 +943,9 @@ namespace Project
             InitUISprites();
             
             // start music
-            GAME_ENGINE.SetVolume(0.2f);
-            Audio audio2 = new Audio("Gradius Sound Effects/Music.mp3");
-            GAME_ENGINE.PlayAudio(audio2);
+            Engine.audio.SetVolume(0.2f);
+            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Music.mp3");
+            Engine.audio.PlayAudio(audio2);
             m_AudioInGame.Add(audio2);
         }
 
@@ -987,10 +989,10 @@ namespace Project
 
             for (int i = 0; i < m_AudioInGame.Count; i++)
             {
-                GAME_ENGINE.StopAudio(m_AudioInGame[i]);
+                Engine.audio.StopAudio(m_AudioInGame[i]);
             }
 
-            this.Dispose();
+            this.Destroy();
         }
     }
 }

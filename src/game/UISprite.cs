@@ -19,7 +19,7 @@
         public override void GameEnd()
         {
             // dispose
-            Dispose();
+            Destroy();
         }
     }
 }

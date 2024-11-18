@@ -16,7 +16,7 @@
         }
         public void Draw(Vector2f location)
         {
-            GAME_ENGINE.DrawBitmap(spritemap, location.X, location.Y, mapLocation.X * spritesize.X, mapLocation.Y * spritesize.Y, spritesize.X, spritesize.Y  );
+            Engine.DrawBitmap(spritemap, location.X, location.Y, mapLocation.X * spritesize.X, mapLocation.Y * spritesize.Y, spritesize.X, spritesize.Y  );
         }
         public SpriteMap(string spriteMapPath, Vector2 spriteSize)
         {
@@ -33,9 +33,7 @@
 
         public override void GameEnd()
         {
-            // dispose spritemap
-            spritemap.Dispose();
-            Dispose();
+            Destroy();
         }
     }
 }
