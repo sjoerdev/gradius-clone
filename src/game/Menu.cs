@@ -26,7 +26,7 @@ namespace Project
         public Menu()
         {
             // start music
-            Engine.audio.SetVolume(0.2f);
+            Engine.SetVolume(0.2f);
 
             // read high score from disc
             m_HighScore = GetScore();
@@ -209,9 +209,9 @@ namespace Project
                 if (Engine.input.GetKeyDown(Key.Enter))
                 {
                     // play sound
-                    Engine.audio.SetVolume(0.3f);
+                    Engine.SetVolume(0.3f);
                     AudioClip audio = new AudioClip("Gradius Sound Effects/projectile.wav");
-                    Engine.audio.PlayAudio(audio);
+                    Engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
                     if (m_SelectedOption == 0)
@@ -236,9 +236,9 @@ namespace Project
                 if (Engine.input.GetKeyDown(Key.Down) || Engine.input.GetKeyDown(Key.S))
                 {
                     // play sound
-                    Engine.audio.SetVolume(0.3f);
+                    Engine.SetVolume(0.3f);
                     AudioClip audio = new AudioClip("Gradius Sound Effects/Select.wav");
-                    Engine.audio.PlayAudio(audio);
+                    Engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
                     if (m_SelectedOption < LastOption)
@@ -253,9 +253,9 @@ namespace Project
                 if (Engine.input.GetKeyDown(Key.Up) || Engine.input.GetKeyDown(Key.W))
                 {
                     // play sound
-                    Engine.audio.SetVolume(0.3f);
+                    Engine.SetVolume(0.3f);
                     AudioClip audio = new AudioClip("Gradius Sound Effects/Select.wav");
-                    Engine.audio.PlayAudio(audio);
+                    Engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
                     if (m_SelectedOption > 0)
@@ -327,7 +327,7 @@ namespace Project
             // stop all audio
             for (int i = 0; i < m_AudioInGame.Count; i++)
             {
-                Engine.audio.StopAudio(m_AudioInGame[i]);
+                Engine.StopAudio(m_AudioInGame[i]);
             }
 
             this.Destroy();

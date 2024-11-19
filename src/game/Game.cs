@@ -86,7 +86,7 @@ namespace Project
         {
             // play bullet sound
             AudioClip audio = new AudioClip("Gradius Sound Effects/schoot.wav");
-            Engine.audio.PlayAudio(audio);
+            Engine.PlayAudio(audio);
             m_AudioInGame.Add(audio);
 
             // init bullet and its componements
@@ -170,7 +170,7 @@ namespace Project
                                 m_LifeInGame.Remove(life);
 
                                 AudioClip audio = new AudioClip("Gradius Sound Effects/Explosion.wav");
-                                Engine.audio.PlayAudio(audio);
+                                Engine.PlayAudio(audio);
                                 m_AudioInGame.Add(audio);
 
                                 // save score to file
@@ -187,7 +187,7 @@ namespace Project
                             // destroy projectile
                             m_ProjectilesInGame.Remove(projectile);
                             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Hit.wav");
-                            Engine.audio.PlayAudio(audio2);
+                            Engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
 
                             return;
@@ -206,7 +206,7 @@ namespace Project
                                 // destroy life
                                 m_LifeInGame.Remove(life);
                                 AudioClip audio = new AudioClip("Gradius Sound Effects/Explosion.wav");
-                                Engine.audio.PlayAudio(audio);
+                                Engine.PlayAudio(audio);
                                 m_AudioInGame.Add(audio);
                                 m_Score += (int)(100 * m_ScoreMultiplier);
                             }
@@ -214,7 +214,7 @@ namespace Project
                             // destroy projectile
                             m_ProjectilesInGame.Remove(projectile);
                             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Hit.wav");
-                            Engine.audio.PlayAudio(audio2);
+                            Engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
 
                             return;
@@ -327,7 +327,7 @@ namespace Project
                             m_PowerUpMomentOfActivation[0] = m_TimePast;
 
                             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
-                            Engine.audio.PlayAudio(audio2);
+                            Engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
                         // if powerup
@@ -339,7 +339,7 @@ namespace Project
                             m_PowerUpActive[1] = true;
                             m_PowerUpMomentOfActivation[1] = m_TimePast;
                             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
-                            Engine.audio.PlayAudio(audio2);
+                            Engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
                         // if powerup
@@ -351,7 +351,7 @@ namespace Project
                             m_PowerUpActive[2] = true;
                             m_PowerUpMomentOfActivation[2] = m_TimePast;
                             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
-                            Engine.audio.PlayAudio(audio2);
+                            Engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
                         // if powerup
@@ -363,7 +363,7 @@ namespace Project
                             m_PowerUpActive[3] = true;
                             m_PowerUpMomentOfActivation[3] = m_TimePast;
                             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
-                            Engine.audio.PlayAudio(audio2);
+                            Engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
 
@@ -944,9 +944,9 @@ namespace Project
             InitUISprites();
             
             // start music
-            Engine.audio.SetVolume(0.2f);
+            Engine.SetVolume(0.2f);
             AudioClip audio2 = new AudioClip("Gradius Sound Effects/Music.mp3");
-            Engine.audio.PlayAudio(audio2);
+            Engine.PlayAudio(audio2);
             m_AudioInGame.Add(audio2);
         }
 
@@ -990,7 +990,7 @@ namespace Project
 
             for (int i = 0; i < m_AudioInGame.Count; i++)
             {
-                Engine.audio.StopAudio(m_AudioInGame[i]);
+                Engine.StopAudio(m_AudioInGame[i]);
             }
 
             this.Destroy();

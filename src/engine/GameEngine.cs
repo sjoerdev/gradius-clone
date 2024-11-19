@@ -11,6 +11,9 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
+
 namespace Project;
 
 public class GameEngine
@@ -31,7 +34,10 @@ public class GameEngine
     public List<GameObject> subscribingGameObjects = [];
     public List<GameObject> unsubscribingGameObjects = [];
     public Input input;
-    public Audio audio;
+
+    // audio
+    private WaveOut outputDevice;
+    private MixingSampleProvider mixer;
 
     // directx
     public RenderTarget renderTarget;
@@ -66,9 +72,9 @@ public class GameEngine
         };
 
         InitializeDeviceResources();
+        InitializeAudioStuff();
 
         input = new(renderForm);
-        audio = new();
         currentBrush = new(renderTarget, SharpDX.Color.Black);
         defaultFont = new("Arial", 12.0f);
     }
@@ -96,6 +102,16 @@ public class GameEngine
         DXGIFactory.MakeWindowAssociation(renderForm.Handle, WindowAssociationFlags.IgnoreAltEnter);
         DXGIFactory.Dispose();
         renderForm.KeyDown += (o, e) => { if (e.Alt && e.KeyCode == Keys.Enter) swapChain.IsFullScreen = !swapChain.IsFullScreen; };
+    }
+
+    private void InitializeAudioStuff()
+    {
+        outputDevice = new();
+        mixer = new(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
+        mixer.ReadFully = true;
+        mixer.RemoveAllMixerInputs();
+        outputDevice.Init(mixer);
+        outputDevice.Play();
     }
 
     public void Run()
@@ -130,6 +146,17 @@ public class GameEngine
         foreach (GameObject go in unsubscribingGameObjects) gameObjects.Remove(go);
         subscribingGameObjects.Clear();
         unsubscribingGameObjects.Clear();
+    }
+
+    public void PlayAudio(AudioClip clip) => mixer.AddMixerInput(ConvertToRightChannelCount(clip));
+    public void StopAudio(AudioClip clip) => mixer.RemoveMixerInput(ConvertToRightChannelCount(clip));
+    public void SetVolume(float volume) => outputDevice.Volume = volume;
+
+    private ISampleProvider ConvertToRightChannelCount(ISampleProvider input)
+    {
+        if (input.WaveFormat.Channels == mixer.WaveFormat.Channels) return input;
+        if (input.WaveFormat.Channels == 1 && mixer.WaveFormat.Channels == 2) return new MonoToStereoSampleProvider(input);
+        return input;
     }
 
     private void ResetTransformMatrix() => renderTarget.Transform = SharpDX.Matrix3x2.Identity;
