@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Project
+namespace Spork
 {
     public class CoolText : UISprite
     {

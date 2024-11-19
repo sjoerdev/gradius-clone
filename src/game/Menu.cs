@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
+using System.Windows.Forms;
 
-using Project;
+using Spork;
 
-namespace Project
+namespace Spork
 {
     public class Menu : GameObject
     {
@@ -26,27 +27,27 @@ namespace Project
         public Menu()
         {
             // start music
-            Engine.SetVolume(0.2f);
+            engine.SetVolume(0.2f);
 
             // read high score from disc
             m_HighScore = GetScore();
 
             // setup gachground sprite
             UISprite background = new UISprite();
-            background.spritemap = new SpriteMap("GradiusSprites/background.png", new Vector2(Engine.windowWidth, Engine.windowHeight));
+            background.spritemap = new SpriteMap("GradiusSprites/background.png", new Vector2(engine.windowWidth, engine.windowHeight));
             background.position = new Vector2(0, 0);
             m_UISpritesInGame.Add(background);
 
             // setup title sprite
             UISprite hudElement = new UISprite();
             hudElement.spritemap = new SpriteMap("GradiusSprites/hud_title.png", new Vector2(242, 48));
-            hudElement.position = new Vector2(Engine.windowWidth / 2 - hudElement.spritemap.spritesize.X, 100);
+            hudElement.position = new Vector2(engine.windowWidth / 2 - hudElement.spritemap.spritesize.X, 100);
             m_UISpritesInGame.Add(hudElement);
 
             // setup title sprite
             UISprite devlogo = new UISprite();
             devlogo.spritemap = new SpriteMap("GradiusSprites/hud_devlogo.png", new Vector2(124, 19));
-            devlogo.position = new Vector2(Engine.windowWidth / 2 - devlogo.spritemap.spritesize.X, 460);
+            devlogo.position = new Vector2(engine.windowWidth / 2 - devlogo.spritemap.spritesize.X, 460);
             m_UISpritesInGame.Add(devlogo);
 
             // setup resistor score sprite
@@ -71,7 +72,7 @@ namespace Project
                 // draw all ui sprites
                 for (int i = 0; i < m_UISpritesInGame.Count; i++)
                 {
-                    if (m_UISpritesInGame[i].spritemap.spritesize.X == Engine.windowWidth) // background sprite exeption
+                    if (m_UISpritesInGame[i].spritemap.spritesize.X == engine.windowWidth) // background sprite exeption
                     {
                         m_UISpritesInGame[i].spritemap.Draw(new Vector2(-m_BackgroundPosition, 0));
                     }
@@ -88,7 +89,7 @@ namespace Project
                 }
 
                 // draw high score color code
-                Engine.SetColor(255, 255, 255);
+                engine.SetColor(255, 255, 255);
                 Vector2 highScoreColorCodePosition = m_HighScorePosition;
                 for (int i = 0; i < 4; i++)
                 {
@@ -97,107 +98,107 @@ namespace Project
                         int firstdigit = Convert.ToInt32(m_HighScore.ToString().Substring(0, 1));
 
                         if (firstdigit == 0)
-                            Engine.SetColor(0, 0, 0);
+                            engine.SetColor(0, 0, 0);
                         else if (firstdigit == 1)
-                            Engine.SetColor(111, 47, 0);
+                            engine.SetColor(111, 47, 0);
                         else if (firstdigit == 2)
-                            Engine.SetColor(255, 0, 0);
+                            engine.SetColor(255, 0, 0);
                         else if (firstdigit == 3)
-                            Engine.SetColor(255, 120, 0);
+                            engine.SetColor(255, 120, 0);
                         else if (firstdigit == 4)
-                            Engine.SetColor(255, 255, 0);
+                            engine.SetColor(255, 255, 0);
                         else if (firstdigit == 5)
-                            Engine.SetColor(0, 255, 0);
+                            engine.SetColor(0, 255, 0);
                         else if (firstdigit == 6)
-                            Engine.SetColor(0, 0, 255);
+                            engine.SetColor(0, 0, 255);
                         else if (firstdigit == 7)
-                            Engine.SetColor(120, 0, 255);
+                            engine.SetColor(120, 0, 255);
                         else if (firstdigit == 8)
-                            Engine.SetColor(120, 120, 120);
+                            engine.SetColor(120, 120, 120);
                         else if (firstdigit == 9)
-                            Engine.SetColor(255, 255, 255);
+                            engine.SetColor(255, 255, 255);
                     }
                     if (i == 1 && m_HighScore.ToString().Length > 1)
                     {
                         int seconddigit = Convert.ToInt32(m_HighScore.ToString().Substring(1, 1));
 
                         if (seconddigit == 0)
-                            Engine.SetColor(0, 0, 0);
+                            engine.SetColor(0, 0, 0);
                         else if (seconddigit == 1)
-                            Engine.SetColor(111, 47, 0);
+                            engine.SetColor(111, 47, 0);
                         else if (seconddigit == 2)
-                            Engine.SetColor(255, 0, 0);
+                            engine.SetColor(255, 0, 0);
                         else if (seconddigit == 3)
-                            Engine.SetColor(255, 120, 0);
+                            engine.SetColor(255, 120, 0);
                         else if (seconddigit == 4)
-                            Engine.SetColor(255, 255, 0);
+                            engine.SetColor(255, 255, 0);
                         else if (seconddigit == 5)
-                            Engine.SetColor(0, 255, 0);
+                            engine.SetColor(0, 255, 0);
                         else if (seconddigit == 6)
-                            Engine.SetColor(0, 0, 255);
+                            engine.SetColor(0, 0, 255);
                         else if (seconddigit == 7)
-                            Engine.SetColor(120, 0, 255);
+                            engine.SetColor(120, 0, 255);
                         else if (seconddigit == 8)
-                            Engine.SetColor(120, 120, 120);
+                            engine.SetColor(120, 120, 120);
                         else if (seconddigit == 9)
-                            Engine.SetColor(255, 255, 255);
+                            engine.SetColor(255, 255, 255);
                     }
                     if (i == 2 && m_HighScore.ToString().Length > 2)
                     {
                         int thirddigit = Convert.ToInt32(m_HighScore.ToString().Substring(2, 1));
 
                         if (thirddigit == 0)
-                            Engine.SetColor(0, 0, 0);
+                            engine.SetColor(0, 0, 0);
                         else if (thirddigit == 1)
-                            Engine.SetColor(111, 47, 0);
+                            engine.SetColor(111, 47, 0);
                         else if (thirddigit == 2)
-                            Engine.SetColor(255, 0, 0);
+                            engine.SetColor(255, 0, 0);
                         else if (thirddigit == 3)
-                            Engine.SetColor(255, 120, 0);
+                            engine.SetColor(255, 120, 0);
                         else if (thirddigit == 4)
-                            Engine.SetColor(255, 255, 0);
+                            engine.SetColor(255, 255, 0);
                         else if (thirddigit == 5)
-                            Engine.SetColor(0, 255, 0);
+                            engine.SetColor(0, 255, 0);
                         else if (thirddigit == 6)
-                            Engine.SetColor(0, 0, 255);
+                            engine.SetColor(0, 0, 255);
                         else if (thirddigit == 7)
-                            Engine.SetColor(120, 0, 255);
+                            engine.SetColor(120, 0, 255);
                         else if (thirddigit == 8)
-                            Engine.SetColor(120, 120, 120);
+                            engine.SetColor(120, 120, 120);
                         else if (thirddigit == 9)
-                            Engine.SetColor(255, 255, 255);
+                            engine.SetColor(255, 255, 255);
                     }
                     if (i == 3 && m_HighScore.ToString().Length > 0)
                     {
                         int multiplier = m_HighScore.ToString().Length - 3;
 
                         if (multiplier == 0)
-                            Engine.SetColor(0, 0, 0);
+                            engine.SetColor(0, 0, 0);
                         else if (multiplier == 1)
-                            Engine.SetColor(111, 47, 0);
+                            engine.SetColor(111, 47, 0);
                         else if (multiplier == 2)
-                            Engine.SetColor(255, 0, 0);
+                            engine.SetColor(255, 0, 0);
                         else if (multiplier == 3)
-                            Engine.SetColor(255, 120, 0);
+                            engine.SetColor(255, 120, 0);
                         else if (multiplier == 4)
-                            Engine.SetColor(255, 255, 0);
+                            engine.SetColor(255, 255, 0);
                         else if (multiplier == 5)
-                            Engine.SetColor(0, 255, 0);
+                            engine.SetColor(0, 255, 0);
                         else if (multiplier == 6)
-                            Engine.SetColor(0, 0, 255);
+                            engine.SetColor(0, 0, 255);
                         else if (multiplier == 7)
-                            Engine.SetColor(120, 0, 255);
+                            engine.SetColor(120, 0, 255);
                         else if (multiplier == 8)
-                            Engine.SetColor(120, 120, 120);
+                            engine.SetColor(120, 120, 120);
                         else if (multiplier == 9)
-                            Engine.SetColor(255, 255, 255);
+                            engine.SetColor(255, 255, 255);
                     }
                     if (m_HighScore <= 0)
                     {
-                        Engine.SetColor(0, 0, 0);
+                        engine.SetColor(0, 0, 0);
                     }
 
-                    Engine.FillRectangle(highScoreColorCodePosition.X + i * 16 + i * 2, highScoreColorCodePosition.Y, 8, 3);
+                    engine.FillRectangle(highScoreColorCodePosition.X + i * 16 + i * 2, highScoreColorCodePosition.Y, 8, 3);
                 }
 
                 // move background position
@@ -206,12 +207,12 @@ namespace Project
                     m_BackgroundPosition = 0;
 
                 // apply selected option
-                if (Engine.input.GetKeyDown(Key.Enter))
+                if (engine.GetKeyDown(Keys.Enter))
                 {
                     // play sound
-                    Engine.SetVolume(0.3f);
+                    engine.SetVolume(0.3f);
                     AudioClip audio = new AudioClip("Gradius Sound Effects/projectile.wav");
-                    Engine.PlayAudio(audio);
+                    engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
                     if (m_SelectedOption == 0)
@@ -233,12 +234,12 @@ namespace Project
 
                 // select option
                 int LastOption = 2;
-                if (Engine.input.GetKeyDown(Key.Down) || Engine.input.GetKeyDown(Key.S))
+                if (engine.GetKeyDown(Keys.Down) || engine.GetKeyDown(Keys.S))
                 {
                     // play sound
-                    Engine.SetVolume(0.3f);
+                    engine.SetVolume(0.3f);
                     AudioClip audio = new AudioClip("Gradius Sound Effects/Select.wav");
-                    Engine.PlayAudio(audio);
+                    engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
                     if (m_SelectedOption < LastOption)
@@ -250,12 +251,12 @@ namespace Project
                         m_SelectedOption = 0;
                     }
                 }
-                if (Engine.input.GetKeyDown(Key.Up) || Engine.input.GetKeyDown(Key.W))
+                if (engine.GetKeyDown(Keys.Up) || engine.GetKeyDown(Keys.W))
                 {
                     // play sound
-                    Engine.SetVolume(0.3f);
+                    engine.SetVolume(0.3f);
                     AudioClip audio = new AudioClip("Gradius Sound Effects/Select.wav");
-                    Engine.PlayAudio(audio);
+                    engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
                     if (m_SelectedOption > 0)
@@ -273,11 +274,11 @@ namespace Project
                 {
                     if (m_SelectedOption == i)
                     {
-                        Engine.SetColor(255, 120, 120);
+                        engine.SetColor(255, 120, 120);
                     }
                     else
                     {
-                        Engine.SetColor(255, 255, 255);
+                        engine.SetColor(255, 255, 255);
                     }
 
                     var position = new Vector2(290, 280 + i * 32);
@@ -295,8 +296,8 @@ namespace Project
                     {
                         text = "Exit And Save";
                     }
-                    
-                    Engine.DrawString(text, position.X, position.Y, 200, 200);
+
+                    engine.DrawString(text, position.X, position.Y, 200, 200);
                 }
             }
         }
@@ -327,7 +328,7 @@ namespace Project
             // stop all audio
             for (int i = 0; i < m_AudioInGame.Count; i++)
             {
-                Engine.StopAudio(m_AudioInGame[i]);
+                engine.StopAudio(m_AudioInGame[i]);
             }
 
             this.Destroy();

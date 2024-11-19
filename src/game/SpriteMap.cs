@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Project;
+namespace Spork;
 
 public class SpriteMap : GameObject
 {
@@ -18,7 +18,7 @@ public class SpriteMap : GameObject
     }
     public void Draw(Vector2 location)
     {
-        Engine.DrawBitmap(spritemap, location.X, location.Y, mapLocation.X * spritesize.X, mapLocation.Y * spritesize.Y, spritesize.X, spritesize.Y  );
+        engine.DrawBitmap(spritemap, location.X, location.Y, mapLocation.X * spritesize.X, mapLocation.Y * spritesize.Y, spritesize.X, spritesize.Y  );
     }
     public SpriteMap(string spriteMapPath, Vector2 spriteSize)
     {

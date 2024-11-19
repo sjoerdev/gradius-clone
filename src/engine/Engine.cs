@@ -14,13 +14,13 @@ using SharpDX.Mathematics.Interop;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace Project;
+namespace Spork;
 
-public class GameEngine
+public class Engine
 {
     // singleton
-    private static GameEngine instance;
-    public static GameEngine Instance
+    private static Engine instance;
+    public static Engine Instance
     {
         get
         {
@@ -29,11 +29,10 @@ public class GameEngine
         }
     }
 
-    // stuff
+    // gameobjects
     private List<GameObject> gameObjects = [];
     public List<GameObject> subscribingGameObjects = [];
     public List<GameObject> unsubscribingGameObjects = [];
-    public Input input;
 
     // audio
     private WaveOut outputDevice;
@@ -46,15 +45,27 @@ public class GameEngine
 
     // window
     public string title = "no title currently";
-    public string iconPath = "res/gradius_icon.ico";
     public int windowWidth = 800;
     public int windowHeight = 600;
-    public SharpDX.Color clearColor = new(255, 255, 255);
+    public Color clearColor = Color.Black;
+
+    // input
+    private List<System.Windows.Forms.Keys> keysPressed = [];
+    private List<System.Windows.Forms.Keys> keysDown = [];
+    private List<System.Windows.Forms.Keys> keysUp = [];
+    private List<MouseButtons> mouseButtonsPressed = [];
+    private List<MouseButtons> mouseButtonsDown = [];
+    private List<MouseButtons> mouseButtonsUp = [];
+    private List<System.Windows.Forms.Keys> keysDownLastFrame = [];
+    private List<System.Windows.Forms.Keys> keysUpLastFrame = [];
+    private List<MouseButtons> mouseButtonsDownLastFrame = [];
+    private List<MouseButtons> mouseButtonsUpLastFrame = [];
+    private Vector2 mousePosition = Vector2.Zero;
 
     // other
     public float deltaTime = 0.0f;
     public float angle = 0.0f;
-    public Vector2 scale = new(1.0f, 1.0f);
+    public Vector2 scale = Vector2.One;
     private SolidColorBrush currentBrush;
     private Font defaultFont;
     private Stopwatch stopwatch;
@@ -65,7 +76,7 @@ public class GameEngine
     {
         renderForm = new RenderForm(title)
         {
-            Icon = Icon.ExtractAssociatedIcon(iconPath),
+            ShowIcon = false,
             ClientSize = new Size(windowWidth, windowHeight),
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             MaximizeBox = false,
@@ -73,8 +84,8 @@ public class GameEngine
 
         InitializeDeviceResources();
         InitializeAudioStuff();
-
-        input = new(renderForm);
+        InitializeInputListening();
+        
         currentBrush = new(renderTarget, SharpDX.Color.Black);
         defaultFont = new("Arial", 12.0f);
     }
@@ -101,7 +112,7 @@ public class GameEngine
         SharpDX.DXGI.Factory DXGIFactory = swapChain.GetParent<SharpDX.DXGI.Factory>();
         DXGIFactory.MakeWindowAssociation(renderForm.Handle, WindowAssociationFlags.IgnoreAltEnter);
         DXGIFactory.Dispose();
-        renderForm.KeyDown += (o, e) => { if (e.Alt && e.KeyCode == Keys.Enter) swapChain.IsFullScreen = !swapChain.IsFullScreen; };
+        renderForm.KeyDown += (o, e) => { if (e.Alt && e.KeyCode == System.Windows.Forms.Keys.Enter) swapChain.IsFullScreen = !swapChain.IsFullScreen; };
     }
 
     private void InitializeAudioStuff()
@@ -112,6 +123,15 @@ public class GameEngine
         mixer.RemoveAllMixerInputs();
         outputDevice.Init(mixer);
         outputDevice.Play();
+    }
+
+    private void InitializeInputListening()
+    {
+        renderForm.KeyDown += (o, e) => keysDownLastFrame.Add(e.KeyCode);
+        renderForm.KeyUp += (o, e) => keysUpLastFrame.Add(e.KeyCode);
+        renderForm.MouseDown += (o, e) => mouseButtonsDownLastFrame.Add(e.Button);
+        renderForm.MouseUp += (o, e) => mouseButtonsUpLastFrame.Add(e.Button);
+        renderForm.MouseMove += (o, e) => mousePosition = new(e.X, e.Y);
     }
 
     public void Run()
@@ -126,8 +146,9 @@ public class GameEngine
         RenderLoop.Run(renderForm, () =>
         {
             renderTarget.BeginDraw();
-            renderTarget.Clear(clearColor);
-            input.Update();
+            renderTarget.Clear(new RawColor4(clearColor.R, clearColor.G, clearColor.B, clearColor.A));
+            HandleKeyboardInput();
+            HandleMouseInput();
             foreach (GameObject go in gameObjects) go.Update();
             canpaint = true;
             foreach (GameObject go in gameObjects) go.Paint();
@@ -146,6 +167,78 @@ public class GameEngine
         foreach (GameObject go in unsubscribingGameObjects) gameObjects.Remove(go);
         subscribingGameObjects.Clear();
         unsubscribingGameObjects.Clear();
+    }
+
+    private void HandleKeyboardInput()
+    {
+        keysDown.Clear();
+        keysUp.Clear();
+
+        foreach (System.Windows.Forms.Keys key in keysDownLastFrame)
+        {
+            if (keysPressed.Contains(key) == false)
+            {
+                keysDown.Add(key);
+                keysPressed.Add(key);
+            }
+        }
+
+        foreach (System.Windows.Forms.Keys key in keysUpLastFrame)
+        {
+            if (keysPressed.Contains(key) == true)
+            {
+                keysUp.Add(key);
+                keysPressed.Remove(key);
+            }
+        }
+
+        keysDownLastFrame.Clear();
+        keysUpLastFrame.Clear();
+    }
+
+    private void HandleMouseInput()
+    {
+        mouseButtonsDown.Clear();
+        mouseButtonsUp.Clear();
+
+        foreach (MouseButtons button in mouseButtonsDownLastFrame)
+        {
+            if (mouseButtonsPressed.Contains(button) == false)
+            {
+                mouseButtonsDown.Add(button);
+                mouseButtonsPressed.Add(button);
+            }
+        }
+
+        foreach (MouseButtons button in mouseButtonsUpLastFrame)
+        {
+            if (mouseButtonsPressed.Contains(button) == true)
+            {
+                mouseButtonsUp.Add(button);
+                mouseButtonsPressed.Remove(button);
+            }
+        }
+
+        mouseButtonsDownLastFrame.Clear();
+        mouseButtonsUpLastFrame.Clear();
+    }
+
+    public bool GetKey(System.Windows.Forms.Keys key) => keysPressed.Contains(key);
+    public bool GetKeyDown(System.Windows.Forms.Keys key) => keysDown.Contains(key);
+    public bool GetKeyUp(System.Windows.Forms.Keys key) => keysUp.Contains(key);
+    public bool GetMouseButton(int buttonID) => mouseButtonsPressed.Contains(TranslateMouseButton(buttonID));
+    public bool GetMouseButtonDown(int buttonID) => mouseButtonsDown.Contains(TranslateMouseButton(buttonID));
+    public bool GetMouseButtonUp(int buttonID) => mouseButtonsUp.Contains(TranslateMouseButton(buttonID));
+    public Vector2 GetMousePosition() => mousePosition;
+    private MouseButtons TranslateMouseButton(int buttonID)
+    {
+        return buttonID switch
+        {
+            0 => MouseButtons.Left,
+            1 => MouseButtons.Right,
+            2 => MouseButtons.Middle,
+            _ => MouseButtons.None,
+        };
     }
 
     public void PlayAudio(AudioClip clip) => mixer.AddMixerInput(ConvertToRightChannelCount(clip));

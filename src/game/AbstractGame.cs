@@ -1,17 +1,16 @@
 ﻿using System;
-using Project;
+using Spork;
 
-namespace Project
+namespace Spork
 {
     public class AbstractGame : GameObject
     {
         public override void GameInitialize()
         {
-            Engine.title = "Gradius Clone Sjoerd Wouters";
-            Engine.windowWidth = 800;
-            Engine.windowHeight = 600;
-            Engine.scale = new(2, 2);
-            Engine.clearColor = new(0, 0, 0);
+            engine.title = "Gradius Clone Sjoerd Wouters";
+            engine.windowWidth = 800;
+            engine.windowHeight = 600;
+            engine.scale = new(2, 2);
         }
 
         public override void GameStart()

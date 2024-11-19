@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Project;
+namespace Spork;
 
 public class EntryPoint
 {
     static void Main()
     {
-        GameEngine instance = GameEngine.Instance;
+        Engine instance = Engine.Instance;
         var game = new AbstractGame();
         instance.Run();
     }

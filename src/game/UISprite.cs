@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Project;
+namespace Spork;
 
 public class UISprite : GameObject
 {

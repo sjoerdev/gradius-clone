@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
-namespace Project
+namespace Spork
 {
     public class Life : GameObject
     {
