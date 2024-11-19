@@ -28,11 +28,7 @@ public class Input
         renderForm.KeyUp += (o, e) => keysUpLastFrame.Add(e.KeyCode);
         renderForm.MouseDown += (o, e) => mouseButtonsDownLastFrame.Add(e.Button);
         renderForm.MouseUp += (o, e) => mouseButtonsUpLastFrame.Add(e.Button);
-        renderForm.MouseMove += (o, e) =>
-        {
-            mousePosition.X = e.X;
-            mousePosition.Y = e.Y;
-        };
+        renderForm.MouseMove += (o, e) => mousePosition = new(e.X, e.Y);
     }
 
     public void Update()

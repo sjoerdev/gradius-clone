@@ -138,11 +138,11 @@ public class GameObject
     public GameObject() => Engine.subscribingGameObjects.Add(this);
 
     public virtual void Destroy() => Engine.unsubscribingGameObjects.Add(this);
-    public virtual void GameInitialize() { }
-    public virtual void GameStart() { }
     public virtual void GameEnd() => Destroy();
-    public virtual void Update() { }
-    public virtual void Paint() { }
+    public virtual void GameInitialize(){}
+    public virtual void GameStart(){}
+    public virtual void Update(){}
+    public virtual void Paint(){}
 
     public void SetActive(bool isActive)
     {
