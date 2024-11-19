@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Numerics;
 
 using SharpDX.Windows;
 using SharpDX.DXGI;
@@ -47,7 +48,7 @@ public class GameEngine
     // other
     public float deltaTime = 0.0f;
     public float angle = 0.0f;
-    public Vector2f scale = new(1.0f, 1.0f);
+    public Vector2 scale = new(1.0f, 1.0f);
     private SolidColorBrush currentBrush;
     private Font defaultFont;
     private Stopwatch stopwatch;
@@ -132,7 +133,7 @@ public class GameEngine
     }
 
     private void ResetTransformMatrix() => renderTarget.Transform = SharpDX.Matrix3x2.Identity;
-    private void SetTransformMatrix(Vector2f position, float angle, Vector2f scale, Vector2f transformCenter)
+    private void SetTransformMatrix(Vector2 position, float angle, Vector2 scale, Vector2 transformCenter)
     {
         var matScale = SharpDX.Matrix3x2.Scaling(scale.X, scale.Y, new SharpDX.Vector2(0.0f, 0.0f));
         var matRotate = SharpDX.Matrix3x2.Rotation(angle, new SharpDX.Vector2(transformCenter.X * this.scale.X, transformCenter.Y * this.scale.Y));
@@ -157,15 +158,15 @@ public class GameEngine
         return color;
     }
 
-    public void DrawLine(Vector2f startPoint, Vector2f endPoint, float strokeWidth) => DrawLine(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y, strokeWidth);
+    public void DrawLine(Vector2 startPoint, Vector2 endPoint, float strokeWidth) => DrawLine(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y, strokeWidth);
     public void DrawLine(float startPointX, float startPointY, float endPointX, float endPointY) => DrawLine(startPointX, startPointY, endPointX, endPointY, 1);
-    public void DrawLine(Vector2f startPoint, Vector2f endPoint) => DrawLine(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+    public void DrawLine(Vector2 startPoint, Vector2 endPoint) => DrawLine(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
     public void DrawLine(float startPointX, float startPointY, float endPointX, float endPointY, float strokeWidth)
     {
         if (!canpaint) return;
         float width = endPointX - startPointX;
         float height = endPointY - startPointY;
-        SetTransformMatrix(new Vector2f(startPointX, startPointY), angle, scale, new Vector2f(width * 0.5f, height * 0.5f));
+        SetTransformMatrix(new Vector2(startPointX, startPointY), angle, scale, new Vector2(width * 0.5f, height * 0.5f));
         RawVector2 p1 = new(0.0f, 0.0f);
         RawVector2 p2 = new(width, height);
         renderTarget.DrawLine(p1, p2, currentBrush, strokeWidth);
@@ -178,7 +179,7 @@ public class GameEngine
     public void DrawRectangle(float x, float y, float width, float height, float strokeWidth)
     {
         if (!canpaint) return;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(width * 0.5f, height * 0.5f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(width * 0.5f, height * 0.5f));
         RawRectangleF rect = new(0.0f, 0.0f, width, height);
         renderTarget.DrawRectangle(rect, currentBrush, strokeWidth);
         ResetTransformMatrix();
@@ -188,19 +189,19 @@ public class GameEngine
     public void FillRectangle(float x, float y, float width, float height)
     {
         if (!canpaint) return;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(width * 0.5f, height * 0.5f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(width * 0.5f, height * 0.5f));
         RawRectangleF rect = new(0.0f, 0.0f, width, height);
         renderTarget.FillRectangle(rect, currentBrush);
         ResetTransformMatrix();
     }
     
-    public void DrawRoundedRectangle(Rectanglef rect, Vector2f radius, int strokeWidth) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y, strokeWidth);
+    public void DrawRoundedRectangle(Rectanglef rect, Vector2 radius, int strokeWidth) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y, strokeWidth);
     public void DrawRoundedRectangle(float x, float y, float width, float height, float radiusX, float radiusY) => DrawRoundedRectangle(x, y, width, height, radiusX, radiusY, 1);
-    public void DrawRoundedRectangle(Rectanglef rect, Vector2f radius) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
+    public void DrawRoundedRectangle(Rectanglef rect, Vector2 radius) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
     public void DrawRoundedRectangle(float x, float y, float width, float height, float radiusX, float radiusY, float strokeWidth)
     {
         if (!canpaint) return;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(width * 0.5f, height * 0.5f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(width * 0.5f, height * 0.5f));
         RawRectangleF rect = new(0.0f, 0.0f, width, height);
         RoundedRectangle roundedRect = new()
         {
@@ -212,11 +213,11 @@ public class GameEngine
         ResetTransformMatrix();
     }
     
-    public void FillRoundedRectangle(Rectanglef rect, Vector2f radius) => FillRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
+    public void FillRoundedRectangle(Rectanglef rect, Vector2 radius) => FillRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
     public void FillRoundedRectangle(float x, float y, float width, float height, float radiusX, float radiusY)
     {
         if (!canpaint) return;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(width * 0.5f, height * 0.5f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(width * 0.5f, height * 0.5f));
         RawRectangleF rect = new(0.0f, 0.0f, width, height);
         RoundedRectangle roundedRect = new()
         {
@@ -234,7 +235,7 @@ public class GameEngine
     public void DrawEllipse(float x, float y, float width, float height, float strokeWidth)
     {
         if (!canpaint) return;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(0.0f, 0.0f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(0.0f, 0.0f));
         Ellipse ellipse = new(new RawVector2(0.0f, 0.0f), width, height);
         renderTarget.DrawEllipse(ellipse, currentBrush, strokeWidth);
         ResetTransformMatrix();
@@ -244,7 +245,7 @@ public class GameEngine
     public void FillEllipse(float x, float y, float width, float height)
     {
         if (!canpaint) return;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(0.0f, 0.0f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(0.0f, 0.0f));
         Ellipse ellipse = new(new RawVector2(0.0f, 0.0f), width, height);
         renderTarget.FillEllipse(ellipse, currentBrush);
         ResetTransformMatrix();
@@ -253,14 +254,14 @@ public class GameEngine
     public void DrawBitmap(Bitmap bitmap, int x, int y, Rectanglef sourceRect) => DrawBitmap(bitmap, x, y, sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
     public void DrawBitmap(Bitmap bitmap, Vector2 position, Rectanglef sourceRect) => DrawBitmap(bitmap, position.X, position.Y, sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
     public void DrawBitmap(Bitmap bitmap, float x, float y) => DrawBitmap(bitmap, x, y, 0, 0, 0, 0);
-    public void DrawBitmap(Bitmap bitmap, Vector2f position) => DrawBitmap(bitmap, position.X, position.Y);
+    public void DrawBitmap(Bitmap bitmap, Vector2 position) => DrawBitmap(bitmap, position.X, position.Y);
     public void DrawBitmap(Bitmap bitmap, float x, float y, float sourceX, float sourceY, float sourceWidth, float sourceHeight)
     {
         if (!canpaint) return;
         SharpDX.Direct2D1.Bitmap D2DBitmap = bitmap.dxbitmap;
         if (sourceWidth == 0)  sourceWidth = D2DBitmap.Size.Width;
         if (sourceHeight == 0) sourceHeight = D2DBitmap.Size.Height;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(sourceWidth * 0.5f, sourceHeight * 0.5f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(sourceWidth * 0.5f, sourceHeight * 0.5f));
         RawRectangleF sourceRect = new(sourceX, sourceY, (sourceX + sourceWidth), (sourceY + sourceHeight));
         renderTarget.DrawBitmap(D2DBitmap, currentBrush.Color.A, SharpDX.Direct2D1.BitmapInterpolationMode.NearestNeighbor, sourceRect);
         ResetTransformMatrix();
@@ -273,7 +274,7 @@ public class GameEngine
     {
         if (!canpaint) return;
         if (font == null) font = defaultFont;
-        SetTransformMatrix(new Vector2f(x, y), angle, scale, new Vector2f(width * 0.5f, height * 0.5f));
+        SetTransformMatrix(new Vector2(x, y), angle, scale, new Vector2(width * 0.5f, height * 0.5f));
         RawRectangleF rect = new(0.0f, 0.0f, width, height);
         renderTarget.DrawText(text, font.format, rect, currentBrush);
         ResetTransformMatrix();

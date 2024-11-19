@@ -1,25 +1,26 @@
-﻿namespace Project
+﻿using System.Numerics;
+
+namespace Project;
+
+public class UISprite : GameObject
 {
-    public class UISprite : GameObject
+    public Vector2 position;
+    public SpriteMap spritemap;
+
+    public UISprite()
     {
-        public Vector2f position;
-        public SpriteMap spritemap;
+        GameInitialize();
+        GameStart();
+    }
 
-        public UISprite()
-        {
-            GameInitialize();
-            GameStart();
-        }
+    public override void Paint()
+    {
+        base.Paint();
+    }
 
-        public override void Paint()
-        {
-            base.Paint();
-        }
-
-        public override void GameEnd()
-        {
-            // dispose
-            Destroy();
-        }
+    public override void GameEnd()
+    {
+        // dispose
+        Destroy();
     }
 }

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Project
 {
     public class Projectile : GameObject
     {
         public SpriteMap spritemap;
-        public Vector2f direction;
-        public Vector2f position;
+        public Vector2 direction;
+        public Vector2 position;
         public int damage;
         public int speed;
         public projectyleType projectyleType;

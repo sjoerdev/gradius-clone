@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Project
 {
     public class Life : GameObject
     {
-        public Vector2f position;
+        public Vector2 position;
         public SpriteMap spritemap;
         public int health;
         public lifeType lifeType;
         public bool isEnemyLife;
-        public Vector2f startPos;
-        public Vector2f offsetFromPlayer;
+        public Vector2 startPos;
+        public Vector2 offsetFromPlayer;
         public float verticalSwingPos = 0;
         public bool swingDirUp = true;
         public int shootSpeed;

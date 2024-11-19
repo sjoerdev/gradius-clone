@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace Project
 {
@@ -6,7 +7,7 @@ namespace Project
     {
         public string text;
         private string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789:";
-        public CoolText(Vector2f pos, string str)
+        public CoolText(Vector2 pos, string str)
         {
             text = str;
             position = pos;
@@ -33,7 +34,7 @@ namespace Project
                         }
                     }
 
-                    spritemap.Draw(position + new Vector2f(16 * i, 0));
+                    spritemap.Draw(position + new Vector2(16 * i, 0));
                 }
             }
         }

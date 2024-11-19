@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 
 using Project;
 
@@ -33,32 +34,32 @@ namespace Project
             // setup gachground sprite
             UISprite background = new UISprite();
             background.spritemap = new SpriteMap("GradiusSprites/background.png", new Vector2(Engine.windowWidth, Engine.windowHeight));
-            background.position = new Vector2f(0, 0);
+            background.position = new Vector2(0, 0);
             m_UISpritesInGame.Add(background);
 
             // setup title sprite
             UISprite hudElement = new UISprite();
             hudElement.spritemap = new SpriteMap("GradiusSprites/hud_title.png", new Vector2(242, 48));
-            hudElement.position = new Vector2f(Engine.windowWidth / 2 - hudElement.spritemap.spritesize.X, 100);
+            hudElement.position = new Vector2(Engine.windowWidth / 2 - hudElement.spritemap.spritesize.X, 100);
             m_UISpritesInGame.Add(hudElement);
 
             // setup title sprite
             UISprite devlogo = new UISprite();
             devlogo.spritemap = new SpriteMap("GradiusSprites/hud_devlogo.png", new Vector2(124, 19));
-            devlogo.position = new Vector2f(Engine.windowWidth / 2 - devlogo.spritemap.spritesize.X, 460);
+            devlogo.position = new Vector2(Engine.windowWidth / 2 - devlogo.spritemap.spritesize.X, 460);
             m_UISpritesInGame.Add(devlogo);
 
             // setup resistor score sprite
             UISprite highScoreBackPlate = new UISprite();
-            highScoreBackPlate.position = new Vector2f(m_HighScorePosition.X - 6, m_HighScorePosition.Y - 4);
+            highScoreBackPlate.position = new Vector2(m_HighScorePosition.X - 6, m_HighScorePosition.Y - 4);
             highScoreBackPlate.spritemap = new SpriteMap("GradiusSprites/resistor_backplate.png", new Vector2(41, 8));
             highScoreBackPlate.spritemap.mapLocation = new Vector2(0, 0);
             m_UISpritesInGame.Add(highScoreBackPlate);
 
             // init cooltext
-            CoolText cooltext = new CoolText(new Vector2f(250, 500), "sjoerd wouters 2021");
+            CoolText cooltext = new CoolText(new Vector2(250, 500), "sjoerd wouters 2021");
             m_CoolTextInGame.Add(cooltext);
-            CoolText cooltext2 = new CoolText(new Vector2f(m_HighScorePosition.X - 190, m_HighScorePosition.Y - 4), "high score:");
+            CoolText cooltext2 = new CoolText(new Vector2(m_HighScorePosition.X - 190, m_HighScorePosition.Y - 4), "high score:");
             m_CoolTextInGame.Add(cooltext2);
         }
 
@@ -72,7 +73,7 @@ namespace Project
                 {
                     if (m_UISpritesInGame[i].spritemap.spritesize.X == Engine.windowWidth) // background sprite exeption
                     {
-                        m_UISpritesInGame[i].spritemap.Draw(new Vector2f(-m_BackgroundPosition, 0));
+                        m_UISpritesInGame[i].spritemap.Draw(new Vector2(-m_BackgroundPosition, 0));
                     }
                     else
                     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Numerics;
 
 using Project;
 
@@ -40,7 +41,7 @@ namespace Project
         private int m_FrameCount;
         private float m_TimePast = 0;
         private int m_BackGroundPos = 0;
-        private Vector2f m_PlayerVector = new Vector2f(1, 1);
+        private Vector2 m_PlayerVector = new Vector2(1, 1);
         private int m_PlayerAnimateStartFrame = 0;
         private List<EnemyToSpawn> m_EnemySpawner = new List<EnemyToSpawn>();
         private List<PickUpToSpawn> m_PickUpSpawner = new List<PickUpToSpawn>();
@@ -66,14 +67,14 @@ namespace Project
         struct EnemyToSpawn
         {
             public lifeType type;
-            public Vector2f position;
+            public Vector2 position;
             public float timer;
-            public Vector2f offsetFromPlayer;
+            public Vector2 offsetFromPlayer;
         };
         struct PickUpToSpawn
         {
             public pickUpType type;
-            public Vector2f position;
+            public Vector2 position;
             public float timer;
         };
 
@@ -81,7 +82,7 @@ namespace Project
         #region
 
         // schoots bullet
-        void SchootBullet(Vector2f startPosition, Vector2f direction, projectyleType type)
+        void SchootBullet(Vector2 startPosition, Vector2 direction, projectyleType type)
         {
             // play bullet sound
             AudioClip audio = new AudioClip("Gradius Sound Effects/schoot.wav");
@@ -96,7 +97,7 @@ namespace Project
         }
 
         // checks if position is on screen or not
-        bool IsPositionOnScreen(Vector2f position)
+        bool IsPositionOnScreen(Vector2 position)
         {
             if (position.X > 0 && position.X < Engine.windowWidth && position.Y > 0 && position.Y < Engine.windowHeight)
                 return true;
@@ -138,9 +139,9 @@ namespace Project
         }
 
         // checks distance between 2 coords
-        float Distance(Vector2f firstVector, Vector2f secondVector)
+        float Distance(Vector2 firstVector, Vector2 secondVector)
         {
-            Vector2f deltaPos = new Vector2f(secondVector.X - firstVector.X, secondVector.Y - firstVector.Y);
+            Vector2 deltaPos = new Vector2(secondVector.X - firstVector.X, secondVector.Y - firstVector.Y);
             float distance = (float)Math.Sqrt((Double)(deltaPos.X * deltaPos.X + deltaPos.Y * deltaPos.Y));
             return distance;
         }
@@ -157,7 +158,7 @@ namespace Project
 
                     if (projectile.isEnemyProjectile && !life.isEnemyLife) // enemy bullets to player
                     {
-                        if (Distance(projectile.position, life.position + new Vector2f(life.spritemap.spritesize.X / 2, life.spritemap.spritesize.Y / 2)) <= distanceToCollide) // collision
+                        if (Distance(projectile.position, life.position + new Vector2(life.spritemap.spritesize.X / 2, life.spritemap.spritesize.Y / 2)) <= distanceToCollide) // collision
                         {
                             // take damage
                             life.health -= projectile.damage;
@@ -194,7 +195,7 @@ namespace Project
                     }
                     else if (!projectile.isEnemyProjectile && life.isEnemyLife) // player bullets to enemies
                     {
-                        if (Distance(projectile.position, life.position + new Vector2f(life.spritemap.spritesize.X / 2, life.spritemap.spritesize.Y / 2)) <= distanceToCollide) // collision
+                        if (Distance(projectile.position, life.position + new Vector2(life.spritemap.spritesize.X / 2, life.spritemap.spritesize.Y / 2)) <= distanceToCollide) // collision
                         {
                             // take damage
                             life.health -= projectile.damage;
@@ -224,11 +225,11 @@ namespace Project
         }
 
         // adds an enemy to spawn to the enemy spawner
-        void SpawnEnemy(float time, float verticalStartPosition, lifeType type, Vector2f offsetFromPlayer)
+        void SpawnEnemy(float time, float verticalStartPosition, lifeType type, Vector2 offsetFromPlayer)
         {
             EnemyToSpawn test = new EnemyToSpawn();
             test.timer = time;
-            test.position = new Vector2f(Engine.windowWidth, verticalStartPosition);
+            test.position = new Vector2(Engine.windowWidth, verticalStartPosition);
             test.type = type;
             test.offsetFromPlayer = offsetFromPlayer;
             m_EnemySpawner.Add(test);
@@ -239,7 +240,7 @@ namespace Project
         {
             PickUpToSpawn test = new PickUpToSpawn();
             test.timer = time;
-            test.position = new Vector2f(Engine.windowHeight, verticalStartPosition);
+            test.position = new Vector2(Engine.windowHeight, verticalStartPosition);
             test.type = type;
             m_PickUpSpawner.Add(test);
         }
@@ -248,8 +249,8 @@ namespace Project
         void MovePlayer()
         {
             float maxSpeed = 200 * m_Player.speedMultiplier;
-            Vector2f acceleration = new Vector2f(4 * m_Player.speedMultiplier, 4 * m_Player.speedMultiplier);
-            Vector2f drag = new Vector2f(0.991f, 0.991f);
+            Vector2 acceleration = new Vector2(4 * m_Player.speedMultiplier, 4 * m_Player.speedMultiplier);
+            Vector2 drag = new Vector2(0.991f, 0.991f);
 
             bool w = Engine.input.GetKey(Key.W) || Engine.input.GetKey(Key.Up);
             bool a = Engine.input.GetKey(Key.A) || Engine.input.GetKey(Key.Left);
@@ -301,7 +302,7 @@ namespace Project
                 m_PlayerVector.Y = 0;
             }
 
-            m_Player.position += new Vector2f(m_PlayerVector.X * Engine.deltaTime, m_PlayerVector.Y * Engine.deltaTime);
+            m_Player.position += new Vector2(m_PlayerVector.X * Engine.deltaTime, m_PlayerVector.Y * Engine.deltaTime);
         }
 
         // checks if the player has picked up a pickup
@@ -314,7 +315,7 @@ namespace Project
                     var pickUp = m_PickUpInGame[i];
                     var life = m_LifeInGame[j];
 
-                    if (Distance(pickUp.position, life.position + new Vector2f(life.spritemap.spritesize.X / 2, life.spritemap.spritesize.Y / 2)) <= distanceToCollide) // collision
+                    if (Distance(pickUp.position, life.position + new Vector2(life.spritemap.spritesize.X / 2, life.spritemap.spritesize.Y / 2)) <= distanceToCollide) // collision
                     {
                         // if powerup
                         if (pickUp.pickUpType == pickUpType.speedPowerup)
@@ -376,7 +377,7 @@ namespace Project
         void InitPlayer()
         {
             m_Player = new Life(lifeType.player);
-            m_Player.position = new Vector2f(100, 300);
+            m_Player.position = new Vector2(100, 300);
             m_LifeInGame.Add(m_Player);
         }
 
@@ -392,7 +393,7 @@ namespace Project
             for (int i = 0; i < 4; i++)
             {
                 UISprite hudElement = new UISprite();
-                hudElement.position = new Vector2f(i * 67 + 6, 578);
+                hudElement.position = new Vector2(i * 67 + 6, 578);
                 hudElement.spritemap = new SpriteMap("GradiusSprites/hud_unlit.png", new Vector2(32, 8));
                 hudElement.spritemap.mapLocation = new Vector2(i, 0);
                 m_PowerupSpritesInGame.Add(hudElement);
@@ -400,18 +401,18 @@ namespace Project
 
             // setup healthbar sprite
             m_HealthBarSpritesheet = new UISprite();
-            m_HealthBarSpritesheet.position = new Vector2f(582, 578);
+            m_HealthBarSpritesheet.position = new Vector2(582, 578);
             m_HealthBarSpritesheet.spritemap = new SpriteMap("GradiusSprites/health_bar_spritesheet.png", new Vector2(106, 8));
             m_HealthBarSpritesheet.spritemap.mapLocation = new Vector2(0, 0);
 
             // setup resistor score sprite
             m_ResistorScoreSpritesheet = new UISprite();
-            m_ResistorScoreSpritesheet.position = new Vector2f(496, 578);
+            m_ResistorScoreSpritesheet.position = new Vector2(496, 578);
             m_ResistorScoreSpritesheet.spritemap = new SpriteMap("GradiusSprites/resistor_backplate.png", new Vector2(41, 8));
             m_ResistorScoreSpritesheet.spritemap.mapLocation = new Vector2(0, 0);
 
             // init health cooltext
-            m_HealthCoolText = new CoolText(new Vector2f(658, 576), "500");
+            m_HealthCoolText = new CoolText(new Vector2(658, 576), "500");
             m_CoolTextInGame.Add(m_HealthCoolText);
         }
 
@@ -422,7 +423,7 @@ namespace Project
 
             if (m_BackGroundPos >= m_Background.Width)
                 m_BackGroundPos = 0;
-            Engine.DrawBitmap(m_Background, new Vector2f(-m_BackGroundPos, 0));
+            Engine.DrawBitmap(m_Background, new Vector2(-m_BackGroundPos, 0));
         }
 
         // updates the ui sprites to display the correct infomation
@@ -563,7 +564,7 @@ namespace Project
             for (int i = 0; i < m_ProjectilesInGame.Count; i++)
             {
                 var bullet = m_ProjectilesInGame[i];
-                bullet.position += new Vector2f(bullet.direction.X * bullet.speed, bullet.direction.Y * bullet.speed);
+                bullet.position += new Vector2(bullet.direction.X * bullet.speed, bullet.direction.Y * bullet.speed);
                 bullet.spritemap.Draw(bullet.position);
 
                 if (!IsPositionOnScreen(bullet.position))
@@ -697,13 +698,13 @@ namespace Project
 
                     if (m_FrameCount % currentLife.shootSpeed == 4)
                     {
-                        SchootBullet(currentLife.position + new Vector2f(-30, 8), new Vector2f(-1, 0), projectyleType.enemyLaser);
+                        SchootBullet(currentLife.position + new Vector2(-30, 8), new Vector2(-1, 0), projectyleType.enemyLaser);
                     }
                 }
                 if (currentLife.lifeType == lifeType.sharpSchooter)
                 {
-                    Vector2f dir = (m_Player.position + currentLife.offsetFromPlayer) - currentLife.position;
-                    currentLife.position += new Vector2f(-0.2f, dir.Y / 200);
+                    Vector2 dir = (m_Player.position + currentLife.offsetFromPlayer) - currentLife.position;
+                    currentLife.position += new Vector2(-0.2f, dir.Y / 200);
 
                     int animationSensitivity = 20;
                     if (dir.Y < animationSensitivity && dir.Y > -animationSensitivity)
@@ -744,7 +745,7 @@ namespace Project
 
                     if (m_FrameCount % currentLife.shootSpeed == 1)
                     {
-                        SchootBullet(currentLife.position + new Vector2f(0, 8), new Vector2f(-1, 0), projectyleType.enemyBullet);
+                        SchootBullet(currentLife.position + new Vector2(0, 8), new Vector2(-1, 0), projectyleType.enemyBullet);
                     }
                 }
                 if (currentLife.lifeType == lifeType.player)
@@ -757,7 +758,7 @@ namespace Project
                     {
                         if (m_FrameCount % 30 == 0)
                         {
-                            SchootBullet(m_Player.position + new Vector2f(32, 8), new Vector2f(1, 0), m_Player.playerProjectile);
+                            SchootBullet(m_Player.position + new Vector2(32, 8), new Vector2(1, 0), m_Player.playerProjectile);
                         }
                     }
                 }
@@ -862,7 +863,7 @@ namespace Project
 
                 if (spawntype == 1)
                 {
-                    SpawnEnemy(0, ypos, (lifeType)random.Next(0, 2), new Vector2f(0, 0));
+                    SpawnEnemy(0, ypos, (lifeType)random.Next(0, 2), new Vector2(0, 0));
                 }
                 if (spawntype == 2)
                 {
@@ -870,15 +871,15 @@ namespace Project
                 }
                 if (spawntype == 3)
                 {
-                    SpawnEnemy(m_FrameCount + 10, ypos + 50, lifeType.sharpSchooter, new Vector2f(0, 50));
-                    SpawnEnemy(m_FrameCount + 20, ypos, lifeType.sharpSchooter, new Vector2f(0, 0));
-                    SpawnEnemy(m_FrameCount + 30, ypos - 50, lifeType.sharpSchooter, new Vector2f(0, -50));
+                    SpawnEnemy(m_FrameCount + 10, ypos + 50, lifeType.sharpSchooter, new Vector2(0, 50));
+                    SpawnEnemy(m_FrameCount + 20, ypos, lifeType.sharpSchooter, new Vector2(0, 0));
+                    SpawnEnemy(m_FrameCount + 30, ypos - 50, lifeType.sharpSchooter, new Vector2(0, -50));
                 }
                 if (spawntype == 4)
                 {
-                    SpawnEnemy(m_FrameCount + 10, ypos + 50, lifeType.gunner, new Vector2f(0, 0));
-                    SpawnEnemy(m_FrameCount + 20, ypos, lifeType.gunner, new Vector2f(0, 0));
-                    SpawnEnemy(m_FrameCount + 30, ypos - 50, lifeType.gunner, new Vector2f(0, 0));
+                    SpawnEnemy(m_FrameCount + 10, ypos + 50, lifeType.gunner, new Vector2(0, 0));
+                    SpawnEnemy(m_FrameCount + 20, ypos, lifeType.gunner, new Vector2(0, 0));
+                    SpawnEnemy(m_FrameCount + 30, ypos - 50, lifeType.gunner, new Vector2(0, 0));
                 }
             }
         }

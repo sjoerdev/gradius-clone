@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Numerics;
 
 using SharpDX.Windows;
 
@@ -17,7 +18,7 @@ public class Input
     private List<Keys> keysUpLastFrame = [];
     private List<MouseButtons> mouseButtonsDownLastFrame = [];
     private List<MouseButtons> mouseButtonsUpLastFrame = [];
-    private Vector2 mousePosition = Vector2.zero;
+    private Vector2 mousePosition = Vector2.Zero;
 
     public Input(RenderForm renderForm) => StartListening(renderForm);
 

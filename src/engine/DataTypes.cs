@@ -165,42 +165,6 @@ public struct Color
     }
 }
 
-public struct Vector2(int x, int y)
-{
-    public int X = x;
-    public int Y = y;
-
-    public static Vector2 operator +(Vector2 vec1, Vector2 vec2)
-    {
-        return new Vector2(vec1.X + vec2.X, vec1.Y + vec2.Y);
-    }
-
-    public static Vector2 operator -(Vector2 vec1, Vector2 vec2)
-    {
-        return new Vector2(vec1.X - vec2.X, vec1.Y - vec2.Y);
-    }
-
-    public static Vector2 zero => new Vector2(0, 0);
-}
-
-public struct Vector2f(float x, float y)
-{
-    public float X = x;
-    public float Y = y;
-
-    public static Vector2f operator +(Vector2f vec1, Vector2f vec2)
-    {
-        return new Vector2f(vec1.X + vec2.X, vec1.Y + vec2.Y);
-    }
-
-    public static Vector2f operator -(Vector2f vec1, Vector2f vec2)
-    {
-        return new Vector2f(vec1.X - vec2.X, vec1.Y - vec2.Y);
-    }
-
-    public static Vector2f zero => new Vector2f(0.0f, 0.0f);
-}
-
 public struct Rectanglef(float x, float y, float width, float height)
 {
     public float X = x;
