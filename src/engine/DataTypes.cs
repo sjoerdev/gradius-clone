@@ -130,14 +130,6 @@ public enum Key
     RControlKey = 163,
 }
 
-public struct Rectangle(float x, float y, float width, float height)
-{
-    public float X = x;
-    public float Y = y;
-    public float Width = width;
-    public float Height = height;
-}
-
 public class GameObject
 {
     public GameEngine Engine => GameEngine.Instance;
