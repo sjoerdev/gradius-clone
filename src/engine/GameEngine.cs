@@ -180,8 +180,8 @@ public class GameEngine
 
     public Color GetColor()
     {
-        var sharpDXColor = currentBrush.Color;
-        var color = new Color((int)(sharpDXColor.R * 255), (int)(sharpDXColor.G * 255), (int)(sharpDXColor.B * 255), (int)(sharpDXColor.A * 255));
+        var sharpdxColor = currentBrush.Color;
+        var color = Color.FromArgb((int)(sharpdxColor.R * 255), (int)(sharpdxColor.G * 255), (int)(sharpdxColor.B * 255), (int)(sharpdxColor.A * 255));
         return color;
     }
 
@@ -200,9 +200,9 @@ public class GameEngine
         ResetTransformMatrix();
     }
 
-    public void DrawRectangle(Rectanglef rect, float strokeWidth) => DrawRectangle(rect.X, rect.Y, rect.Width, rect.Height, strokeWidth);
+    public void DrawRectangle(Rectangle rect, float strokeWidth) => DrawRectangle(rect.X, rect.Y, rect.Width, rect.Height, strokeWidth);
     public void DrawRectangle(float x, float y, float width, float height) => DrawRectangle(x, y, width, height, 1);
-    public void DrawRectangle(Rectanglef rect) => DrawRectangle(rect.X, rect.Y, rect.Width, rect.Height);
+    public void DrawRectangle(Rectangle rect) => DrawRectangle(rect.X, rect.Y, rect.Width, rect.Height);
     public void DrawRectangle(float x, float y, float width, float height, float strokeWidth)
     {
         if (!canpaint) return;
@@ -212,7 +212,7 @@ public class GameEngine
         ResetTransformMatrix();
     }
     
-    public void FillRectangle(Rectanglef rect) => FillRectangle(rect.X, rect.Y, rect.Width, rect.Height);
+    public void FillRectangle(Rectangle rect) => FillRectangle(rect.X, rect.Y, rect.Width, rect.Height);
     public void FillRectangle(float x, float y, float width, float height)
     {
         if (!canpaint) return;
@@ -222,9 +222,9 @@ public class GameEngine
         ResetTransformMatrix();
     }
     
-    public void DrawRoundedRectangle(Rectanglef rect, Vector2 radius, int strokeWidth) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y, strokeWidth);
+    public void DrawRoundedRectangle(Rectangle rect, Vector2 radius, int strokeWidth) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y, strokeWidth);
     public void DrawRoundedRectangle(float x, float y, float width, float height, float radiusX, float radiusY) => DrawRoundedRectangle(x, y, width, height, radiusX, radiusY, 1);
-    public void DrawRoundedRectangle(Rectanglef rect, Vector2 radius) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
+    public void DrawRoundedRectangle(Rectangle rect, Vector2 radius) => DrawRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
     public void DrawRoundedRectangle(float x, float y, float width, float height, float radiusX, float radiusY, float strokeWidth)
     {
         if (!canpaint) return;
@@ -240,7 +240,7 @@ public class GameEngine
         ResetTransformMatrix();
     }
     
-    public void FillRoundedRectangle(Rectanglef rect, Vector2 radius) => FillRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
+    public void FillRoundedRectangle(Rectangle rect, Vector2 radius) => FillRoundedRectangle(rect.X, rect.Y, rect.Width, rect.Height, radius.X, radius.Y);
     public void FillRoundedRectangle(float x, float y, float width, float height, float radiusX, float radiusY)
     {
         if (!canpaint) return;
@@ -256,9 +256,9 @@ public class GameEngine
         ResetTransformMatrix();
     }
 
-    public void DrawEllipse(Rectanglef rect, float strokeWidth) => DrawEllipse(rect.X, rect.Y, rect.Width, rect.Height, strokeWidth);
+    public void DrawEllipse(Rectangle rect, float strokeWidth) => DrawEllipse(rect.X, rect.Y, rect.Width, rect.Height, strokeWidth);
     public void DrawEllipse(float x, float y, float width, float height) => DrawEllipse(x, y, width, height, 1);
-    public void DrawEllipse(Rectanglef rect) => DrawEllipse(rect.X, rect.Y, rect.Width, rect.Height);
+    public void DrawEllipse(Rectangle rect) => DrawEllipse(rect.X, rect.Y, rect.Width, rect.Height);
     public void DrawEllipse(float x, float y, float width, float height, float strokeWidth)
     {
         if (!canpaint) return;
@@ -268,7 +268,7 @@ public class GameEngine
         ResetTransformMatrix();
     }
     
-    public void FillEllipse(Rectanglef rect) => FillEllipse(rect.X, rect.Y, rect.Width, rect.Height);
+    public void FillEllipse(Rectangle rect) => FillEllipse(rect.X, rect.Y, rect.Width, rect.Height);
     public void FillEllipse(float x, float y, float width, float height)
     {
         if (!canpaint) return;
@@ -278,8 +278,8 @@ public class GameEngine
         ResetTransformMatrix();
     }
 
-    public void DrawBitmap(Bitmap bitmap, int x, int y, Rectanglef sourceRect) => DrawBitmap(bitmap, x, y, sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
-    public void DrawBitmap(Bitmap bitmap, Vector2 position, Rectanglef sourceRect) => DrawBitmap(bitmap, position.X, position.Y, sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
+    public void DrawBitmap(Bitmap bitmap, int x, int y, Rectangle sourceRect) => DrawBitmap(bitmap, x, y, sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
+    public void DrawBitmap(Bitmap bitmap, Vector2 position, Rectangle sourceRect) => DrawBitmap(bitmap, position.X, position.Y, sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
     public void DrawBitmap(Bitmap bitmap, float x, float y) => DrawBitmap(bitmap, x, y, 0, 0, 0, 0);
     public void DrawBitmap(Bitmap bitmap, Vector2 position) => DrawBitmap(bitmap, position.X, position.Y);
     public void DrawBitmap(Bitmap bitmap, float x, float y, float sourceX, float sourceY, float sourceWidth, float sourceHeight)
@@ -294,9 +294,9 @@ public class GameEngine
         ResetTransformMatrix();
     }
 
-    public void DrawString(Font font, string text, Rectanglef rect) => DrawString(font, text, rect.X, rect.Y, rect.Width, rect.Height);
+    public void DrawString(Font font, string text, Rectangle rect) => DrawString(font, text, rect.X, rect.Y, rect.Width, rect.Height);
     public void DrawString(string text, float x, float y, float width, float height) => DrawString(null, text, x, y, width, height);
-    public void DrawString(string text, Rectanglef rect) => DrawString(text, rect.X, rect.Y, rect.Width, rect.Height);
+    public void DrawString(string text, Rectangle rect) => DrawString(text, rect.X, rect.Y, rect.Width, rect.Height);
     public void DrawString(Font font, string text, float x, float y, float width, float height)
     {
         if (!canpaint) return;
