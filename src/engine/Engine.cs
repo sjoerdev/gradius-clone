@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -10,6 +12,8 @@ using SharpDX.Direct2D1;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
+using SharpDX.WIC;
+using SharpDX.IO;
 
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
@@ -50,14 +54,14 @@ public class Engine
     public Color clearColor = Color.Black;
 
     // input
-    private List<System.Windows.Forms.Keys> keysPressed = [];
-    private List<System.Windows.Forms.Keys> keysDown = [];
-    private List<System.Windows.Forms.Keys> keysUp = [];
+    private List<Keys> keysPressed = [];
+    private List<Keys> keysDown = [];
+    private List<Keys> keysUp = [];
     private List<MouseButtons> mouseButtonsPressed = [];
     private List<MouseButtons> mouseButtonsDown = [];
     private List<MouseButtons> mouseButtonsUp = [];
-    private List<System.Windows.Forms.Keys> keysDownLastFrame = [];
-    private List<System.Windows.Forms.Keys> keysUpLastFrame = [];
+    private List<Keys> keysDownLastFrame = [];
+    private List<Keys> keysUpLastFrame = [];
     private List<MouseButtons> mouseButtonsDownLastFrame = [];
     private List<MouseButtons> mouseButtonsUpLastFrame = [];
     private Vector2 mousePosition = Vector2.Zero;
@@ -108,11 +112,11 @@ public class Engine
         Texture2D backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
         Surface surface = backBuffer.QueryInterface<Surface>();
         backBuffer.Dispose();
-        renderTarget = new RenderTarget(new(), surface, new RenderTargetProperties(new PixelFormat(Format.Unknown, SharpDX.Direct2D1.AlphaMode.Premultiplied)));
+        renderTarget = new RenderTarget(new(), surface, new(new(Format.Unknown, SharpDX.Direct2D1.AlphaMode.Premultiplied)));
         SharpDX.DXGI.Factory DXGIFactory = swapChain.GetParent<SharpDX.DXGI.Factory>();
         DXGIFactory.MakeWindowAssociation(renderForm.Handle, WindowAssociationFlags.IgnoreAltEnter);
         DXGIFactory.Dispose();
-        renderForm.KeyDown += (o, e) => { if (e.Alt && e.KeyCode == System.Windows.Forms.Keys.Enter) swapChain.IsFullScreen = !swapChain.IsFullScreen; };
+        renderForm.KeyDown += (o, e) => { if (e.Alt && e.KeyCode == Keys.Enter) swapChain.IsFullScreen = !swapChain.IsFullScreen; };
     }
 
     private void InitializeAudioStuff()
@@ -174,7 +178,7 @@ public class Engine
         keysDown.Clear();
         keysUp.Clear();
 
-        foreach (System.Windows.Forms.Keys key in keysDownLastFrame)
+        foreach (Keys key in keysDownLastFrame)
         {
             if (keysPressed.Contains(key) == false)
             {
@@ -183,7 +187,7 @@ public class Engine
             }
         }
 
-        foreach (System.Windows.Forms.Keys key in keysUpLastFrame)
+        foreach (Keys key in keysUpLastFrame)
         {
             if (keysPressed.Contains(key) == true)
             {
@@ -223,9 +227,9 @@ public class Engine
         mouseButtonsUpLastFrame.Clear();
     }
 
-    public bool GetKey(System.Windows.Forms.Keys key) => keysPressed.Contains(key);
-    public bool GetKeyDown(System.Windows.Forms.Keys key) => keysDown.Contains(key);
-    public bool GetKeyUp(System.Windows.Forms.Keys key) => keysUp.Contains(key);
+    public bool GetKey(Keys key) => keysPressed.Contains(key);
+    public bool GetKeyDown(Keys key) => keysDown.Contains(key);
+    public bool GetKeyUp(Keys key) => keysUp.Contains(key);
     public bool GetMouseButton(int buttonID) => mouseButtonsPressed.Contains(TranslateMouseButton(buttonID));
     public bool GetMouseButtonDown(int buttonID) => mouseButtonsDown.Contains(TranslateMouseButton(buttonID));
     public bool GetMouseButtonUp(int buttonID) => mouseButtonsUp.Contains(TranslateMouseButton(buttonID));
@@ -398,5 +402,140 @@ public class Engine
         RawRectangleF rect = new(0.0f, 0.0f, width, height);
         renderTarget.DrawText(text, font.format, rect, currentBrush);
         ResetTransformMatrix();
+    }
+}
+
+public class GameObject
+{
+    public Engine engine => Engine.Instance;
+    public bool isActive = true;
+
+    public GameObject() => engine.subscribingGameObjects.Add(this);
+
+    public virtual void Destroy() => engine.unsubscribingGameObjects.Add(this);
+    public virtual void GameEnd(){}
+    public virtual void GameInitialize(){}
+    public virtual void GameStart(){}
+    public virtual void Update(){}
+    public virtual void Paint(){}
+
+    public void SetActive(bool value)
+    {
+        if (isActive == value) return;
+        if (value == true) engine.subscribingGameObjects.Add(this);
+        else engine.unsubscribingGameObjects.Add(this);
+        isActive = value;
+    }
+}
+
+public class Bitmap
+{
+    public SharpDX.Direct2D1.Bitmap dxbitmap;
+    public float Width => dxbitmap.Size.Width;
+    public float Height => dxbitmap.Size.Height;
+
+    public Bitmap(string filePath) => LoadFromFile(filePath);
+
+    private void LoadFromFile(string filePath)
+    {
+        ImagingFactory imagingFactory = new();
+        NativeFileStream fileStream = new(filePath, NativeFileMode.Open, NativeFileAccess.Read);
+        BitmapDecoder bitmapDecoder = new(imagingFactory, fileStream, DecodeOptions.CacheOnDemand);
+        BitmapFrameDecode frame = bitmapDecoder.GetFrame(0);
+        FormatConverter converter = new(imagingFactory);
+        converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPRGBA);
+        RenderTarget renderTarget = Engine.Instance.renderTarget;
+        dxbitmap = Bitmap1.FromWicBitmap(renderTarget, converter);
+    }
+}
+
+public class Font
+{
+    public enum Alignment
+    {
+        Left,
+        Right,
+        Center
+    }
+
+    public SharpDX.DirectWrite.TextFormat format;
+
+    public Font(string name, float size)
+    {
+        SharpDX.DirectWrite.Factory fontFactory = new();
+        format = new SharpDX.DirectWrite.TextFormat(fontFactory, name, size);
+        fontFactory.Dispose();
+    }
+
+    public void SetHorizontalAlignment(Alignment alignment) => format.TextAlignment = (SharpDX.DirectWrite.TextAlignment)alignment;
+    public void SetVerticalAlignment(Alignment alignment) => format.ParagraphAlignment = (SharpDX.DirectWrite.ParagraphAlignment)alignment;
+}
+
+public class AudioClip : ISampleProvider
+{
+    private float[] originalData;
+    private float[] data;
+    private long currentPosition;
+
+    private float volume = 1.0f;
+    private bool looping = false;
+
+    private WaveFormat waveFormat;
+    public WaveFormat WaveFormat => waveFormat;
+
+    public AudioClip(string filePath) => LoadAudio("res/" + filePath);
+
+    private void LoadAudio(string filePath)
+    {
+        using AudioFileReader audioFileReader = new(filePath);
+        var provider = new SampleToWaveProvider(audioFileReader);
+        var resampler = new MediaFoundationResampler(provider, WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
+        resampler.ResamplerQuality = 60;
+        waveFormat = new WaveToSampleProvider(resampler).WaveFormat;
+        List<float> wholeFile = new((int)(audioFileReader.Length / 4));
+        
+        float[] readBuffer = new float[new WaveToSampleProvider(new MediaFoundationResampler(new SampleToWaveProvider(audioFileReader), WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+        {
+            ResamplerQuality = 60
+        }).WaveFormat.SampleRate * new WaveToSampleProvider(new MediaFoundationResampler(new SampleToWaveProvider(audioFileReader), WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+        {
+            ResamplerQuality = 60
+        }).WaveFormat.Channels];
+
+        int samplesRead;
+        while ((samplesRead = new WaveToSampleProvider(new MediaFoundationResampler(new SampleToWaveProvider(audioFileReader), WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+        { ResamplerQuality = 60 }).Read(readBuffer, 0, readBuffer.Length)) > 0)
+        {
+            wholeFile.AddRange(readBuffer.Take(samplesRead));
+        }
+
+        originalData = wholeFile.ToArray();
+        data = originalData;
+    }
+
+    public void SetVolume(float volume)
+    {
+        for (int i = 0; i < originalData.Length; ++i) data[i] = originalData[i] * volume;
+    }
+
+    public void SetLooping(bool value) => looping = value;
+    public float GetVolume() => volume;
+    public bool IsLooping() => looping;
+
+    public int Read(float[] buffer, int offset, int count)
+    {
+        long availableSamples = data.Length - currentPosition;
+
+        if (availableSamples <= 0)
+        {
+            currentPosition = 0;
+            availableSamples = 0;
+            if (looping == true) availableSamples = data.Length - currentPosition;
+        }
+
+        long samplesToCopy = Math.Min(availableSamples, count);
+        Array.Copy(data, currentPosition, buffer, offset, samplesToCopy);
+        currentPosition += samplesToCopy;
+        return (int)samplesToCopy;
     }
 }

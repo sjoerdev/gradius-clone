@@ -386,9 +386,9 @@ namespace Spork
         void InitUISprites()
         {
             // init some loose bitmaps
-            m_Background = new Bitmap("GradiusSprites/background.png");
-            m_HudLit = new Bitmap("GradiusSprites/hud_lit.png");
-            m_HudUnLit = new Bitmap("GradiusSprites/hud_unlit.png");
+            m_Background = new Bitmap("res/GradiusSprites/background.png");
+            m_HudLit = new Bitmap("res/GradiusSprites/hud_lit.png");
+            m_HudUnLit = new Bitmap("res/GradiusSprites/hud_unlit.png");
 
             // initialize powerup sprites
             for (int i = 0; i < 4; i++)

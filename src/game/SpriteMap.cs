@@ -28,7 +28,7 @@ public class SpriteMap : GameObject
     }
     public void InitSpriteMap(string spriteMapPath, Vector2 spriteSize)
     {
-        spritemap = new Bitmap(spriteMapPath);
+        spritemap = new Bitmap("res/" + spriteMapPath);
         mapLocation = new Vector2(0, 0);
         spritesize = spriteSize;
     }
