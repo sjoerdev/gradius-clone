@@ -86,7 +86,7 @@ namespace Spork
         void SchootBullet(Vector2 startPosition, Vector2 direction, projectyleType type)
         {
             // play bullet sound
-            AudioClip audio = new AudioClip("Gradius Sound Effects/schoot.wav");
+            AudioClip audio = new AudioClip("res/" +"Gradius Sound Effects/schoot.wav");
             engine.PlayAudio(audio);
             m_AudioInGame.Add(audio);
 
@@ -170,7 +170,7 @@ namespace Spork
                                 // destroy life
                                 m_LifeInGame.Remove(life);
 
-                                AudioClip audio = new AudioClip("Gradius Sound Effects/Explosion.wav");
+                                AudioClip audio = new AudioClip("res/" +"Gradius Sound Effects/Explosion.wav");
                                 engine.PlayAudio(audio);
                                 m_AudioInGame.Add(audio);
 
@@ -187,7 +187,7 @@ namespace Spork
 
                             // destroy projectile
                             m_ProjectilesInGame.Remove(projectile);
-                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Hit.wav");
+                            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Hit.wav");
                             engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
 
@@ -206,7 +206,7 @@ namespace Spork
                             {
                                 // destroy life
                                 m_LifeInGame.Remove(life);
-                                AudioClip audio = new AudioClip("Gradius Sound Effects/Explosion.wav");
+                                AudioClip audio = new AudioClip("res/" +"Gradius Sound Effects/Explosion.wav");
                                 engine.PlayAudio(audio);
                                 m_AudioInGame.Add(audio);
                                 m_Score += (int)(100 * m_ScoreMultiplier);
@@ -214,7 +214,7 @@ namespace Spork
 
                             // destroy projectile
                             m_ProjectilesInGame.Remove(projectile);
-                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Hit.wav");
+                            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Hit.wav");
                             engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
 
@@ -327,7 +327,7 @@ namespace Spork
                             m_PowerUpActive[0] = true;
                             m_PowerUpMomentOfActivation[0] = m_TimePast;
 
-                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Pickup.wav");
                             engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
@@ -339,7 +339,7 @@ namespace Spork
                             pickUp.Destroy();
                             m_PowerUpActive[1] = true;
                             m_PowerUpMomentOfActivation[1] = m_TimePast;
-                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Pickup.wav");
                             engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
@@ -351,7 +351,7 @@ namespace Spork
                             pickUp.Destroy();
                             m_PowerUpActive[2] = true;
                             m_PowerUpMomentOfActivation[2] = m_TimePast;
-                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Pickup.wav");
                             engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
@@ -363,7 +363,7 @@ namespace Spork
                             pickUp.Destroy();
                             m_PowerUpActive[3] = true;
                             m_PowerUpMomentOfActivation[3] = m_TimePast;
-                            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Pickup.wav");
+                            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Pickup.wav");
                             engine.PlayAudio(audio2);
                             m_AudioInGame.Add(audio2);
                         }
@@ -946,7 +946,7 @@ namespace Spork
 
             // start music
             engine.SetVolume(0.2f);
-            AudioClip audio2 = new AudioClip("Gradius Sound Effects/Music.mp3");
+            AudioClip audio2 = new AudioClip("res/" +"Gradius Sound Effects/Music.mp3");
             engine.PlayAudio(audio2);
             m_AudioInGame.Add(audio2);
         }

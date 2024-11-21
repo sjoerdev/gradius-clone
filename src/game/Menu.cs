@@ -211,7 +211,7 @@ namespace Spork
                 {
                     // play sound
                     engine.SetVolume(0.3f);
-                    AudioClip audio = new AudioClip("Gradius Sound Effects/projectile.wav");
+                    AudioClip audio = new AudioClip("res/" +"Gradius Sound Effects/projectile.wav");
                     engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
@@ -238,7 +238,7 @@ namespace Spork
                 {
                     // play sound
                     engine.SetVolume(0.3f);
-                    AudioClip audio = new AudioClip("Gradius Sound Effects/Select.wav");
+                    AudioClip audio = new AudioClip("res/" +"Gradius Sound Effects/Select.wav");
                     engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 
@@ -255,7 +255,7 @@ namespace Spork
                 {
                     // play sound
                     engine.SetVolume(0.3f);
-                    AudioClip audio = new AudioClip("Gradius Sound Effects/Select.wav");
+                    AudioClip audio = new AudioClip("res/" +"Gradius Sound Effects/Select.wav");
                     engine.PlayAudio(audio);
                     m_AudioInGame.Add(audio);
 

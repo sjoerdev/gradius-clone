@@ -24,14 +24,7 @@ public class Engine
 {
     // singleton
     private static Engine instance;
-    public static Engine Instance
-    {
-        get
-        {
-            instance ??= new();
-            return instance;
-        }
-    }
+    public static Engine Instance = instance ??= new();
 
     // gameobjects
     private List<GameObject> gameObjects = [];
@@ -483,30 +476,25 @@ public class AudioClip : ISampleProvider
     private WaveFormat waveFormat;
     public WaveFormat WaveFormat => waveFormat;
 
-    public AudioClip(string filePath) => LoadAudio("res/" + filePath);
+    public AudioClip(string filePath) => LoadAudio(filePath);
 
     private void LoadAudio(string filePath)
     {
         using AudioFileReader audioFileReader = new(filePath);
         var provider = new SampleToWaveProvider(audioFileReader);
-        var resampler = new MediaFoundationResampler(provider, WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
+        var outputFormat = WaveFormat.CreateIeeeFloatWaveFormat(44100, 2);
+        var resampler = new MediaFoundationResampler(provider, outputFormat);
         resampler.ResamplerQuality = 60;
-        waveFormat = new WaveToSampleProvider(resampler).WaveFormat;
+        var waveToSampleProvider = new WaveToSampleProvider(resampler);
+        waveFormat = waveToSampleProvider.WaveFormat;
         List<float> wholeFile = new((int)(audioFileReader.Length / 4));
+        float[] readBuffer = new float[waveFormat.SampleRate * waveFormat.Channels];
+        int samplesRead = waveToSampleProvider.Read(readBuffer, 0, readBuffer.Length);
         
-        float[] readBuffer = new float[new WaveToSampleProvider(new MediaFoundationResampler(new SampleToWaveProvider(audioFileReader), WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
-        {
-            ResamplerQuality = 60
-        }).WaveFormat.SampleRate * new WaveToSampleProvider(new MediaFoundationResampler(new SampleToWaveProvider(audioFileReader), WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
-        {
-            ResamplerQuality = 60
-        }).WaveFormat.Channels];
-
-        int samplesRead;
-        while ((samplesRead = new WaveToSampleProvider(new MediaFoundationResampler(new SampleToWaveProvider(audioFileReader), WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
-        { ResamplerQuality = 60 }).Read(readBuffer, 0, readBuffer.Length)) > 0)
+        while (samplesRead > 0)
         {
             wholeFile.AddRange(readBuffer.Take(samplesRead));
+            samplesRead = waveToSampleProvider.Read(readBuffer, 0, readBuffer.Length);
         }
 
         originalData = wholeFile.ToArray();
