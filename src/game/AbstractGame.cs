@@ -1,7 +1,6 @@
-﻿using System;
-using Spork;
+﻿using Spork;
 
-namespace Spork;
+namespace GradiusClone;
 
 public class AbstractGame : GameObject
 {

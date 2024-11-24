@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 using Spork;
 
-namespace Spork;
+namespace GradiusClone;
 
 public class Menu : GameObject
 {

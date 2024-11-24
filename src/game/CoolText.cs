@@ -1,7 +1,7 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using Spork;
 
-namespace Spork;
+namespace GradiusClone;
 
 public class CoolText : UISprite
 {

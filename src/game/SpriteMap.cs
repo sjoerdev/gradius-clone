@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
+using Spork;
 
-namespace Spork;
+namespace GradiusClone;
 
 public class SpriteMap : GameObject
 {

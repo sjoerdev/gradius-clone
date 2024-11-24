@@ -5,9 +5,8 @@ using System.IO;
 using System.Numerics;
 
 using Spork;
-using System.Windows.Forms;
 
-namespace Spork;
+namespace GradiusClone;
 
 // declare enums
 public enum lifeType

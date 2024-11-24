@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Spork;
 
-namespace Spork;
+namespace GradiusClone;
 
 public class EntryPoint
 {
