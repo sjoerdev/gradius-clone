@@ -1,5 +1,7 @@
 ## What is this:
-This is a gradius clone i made a long time ago (the code sucks)
+This is a gradius clone i made a long time ago (the code sucks).
+
+The custom game engine is also open source and can be found [here](https://github.com/sjoerdev/canvas).
 
 ## Screenshots:
 <img width="512" alt="Screenshot 2022-08-22 183046" src="https://user-images.githubusercontent.com/59654421/185972539-54171a48-3f81-4210-ba11-4cc478ee590d.png">
