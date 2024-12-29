@@ -18,7 +18,7 @@ using SharpDX.IO;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace Spork;
+namespace Canvas;
 
 public class Engine
 {
