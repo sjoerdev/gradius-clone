@@ -15,7 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="res\**" CopyToPublishDirectory="PreserveNewest"/>
+    <Content Include="res/**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
